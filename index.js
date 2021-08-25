@@ -1,93 +1,96 @@
 const express = require('express');
-const expresHbs = require('express-handlebars');
-const fs = require('fs');
+const expressHbs = require('express-handlebars');
+const fs = require('fs/promises');
 const path = require('path');
-const {PORT} = require('./config/variables');
+const { PORT } = require('./config/variables');
 
-const fileDB = path.join(__dirname, 'db', 'users.txt');
+const fileDB = path.join(__dirname, 'db', 'db.json');
 
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.set('view engine', '.hbs');
-app.engine('.hbs', expresHbs({defaultLayout: false}));
+app.engine('.hbs', expressHbs({ defaultLayout: false }));
 app.set('views', path.join(__dirname, 'stats'));
 app.use(express.static(path.join(__dirname, 'stats')));
 
 app.get('/', (req, res) => {
-    res.render('home');
-});
-
-app.get('/login', (req, res) => {
-    res.render('login');
+  res.render('home');
 });
 
 app.get('/registration', (req, res) => {
-    res.render('registration');
+  res.render('registration');
 });
 
-app.get('/user', (req, res) => {
-    res.render('user');
+app.get('/login', (req, res) => {
+  res.render('login');
 });
 
-app.get('/users', (req, res) => {
-    fs.readFile(fileDB, (err, data) => {
-
-        if (err) {
-            res.status(404).json('User not found');
-            return;
-        }
-        const users = JSON.parse(data);
-        res.render('users', {
-            users
-        });
-    });
+app.get('/users', async (req, res) => {
+  const users = await getUsers();
+  res.render('users', { users });
 });
 
-app.post('/login', (req, res) => {
-    fs.readFile(fileDB, (errReadFile, textFormFile) => {
+app.get('/user/:user_id', async (req, res) => {
+  try {
+    const { user_id } = req.params;
 
-        if (errReadFile) {
-            res.status(404).json('User not found');
-            return;
-        }
-        const {login, password, email} = req.body;
-        const arr = JSON.parse(textFormFile);
-        const find = arr.find((value) => value.password === password && value.login === login && value.email === email);
+    const users = await getUsers();
+    const userId = users[user_id];
 
-        find ? res.render('user', {userFind: {find}}) : res.redirect('/registration');
-    });
+    if ( !userId ) {
+      res.status(404)
+        .end('User Not Found');
+      return;
+    }
+
+    res.render('user', { userId });
+  } catch (e) {
+    console.log(e);
+  }
 });
 
+app.post('/registration', async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const textFromFile = await fs.readFile(fileDB, 'utf8');
 
-app.post('/registration', (req, res) => {
-    fs.readFile(fileDB, (errFileReg, data) => {
+    const users = textFromFile ? JSON.parse(textFromFile.toString()) : [];
+    const user = users.find(user => user.email === email);
 
-        if (errFileReg) {
-            console.log(errFileReg)
-            return;
-        }
-        const {login} = req.body
-        const arr = (data.toString()) ? JSON.parse(data.toString()) : [];
-        const find = arr.find((value) => value.login === login);
-
-        if (find) {
-            return res.redirect('/login');
-        }
-        arr.push(req.body);
-        fs.writeFile(fileDB, `${JSON.stringify(arr)}`, (errWriteFile) => {
-
-            if (errWriteFile) {
-                res.status(404).json('User not found');
-                return;
-            }
-            const regFind = arr.find((value) => value.login === login);
-            res.render('user', {userFind: {regFind}});
-        });
-    });
+    if ( user ) {
+      res.status(401)
+        .end('email is already in use');
+      return;
+    }
+    users.push(req.body);
+    await fs.writeFile(fileDB, JSON.stringify(users));
+    res.redirect('/');
+  } catch (e) {
+    console.log(e);
+  }
 });
+
+app.post('/login', async (req, res) => {
+  try {
+    const { login, password, email } = req.body;
+    const users = await getUsers();
+    const find = users.findIndex(user => user.email === email && user.password === password);
+
+    if ( find !== -1 ) {
+      res.redirect(`/user/${find}`);
+      return;
+    }
+    res.redirect('/registration');
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+async function getUsers() {
+  return JSON.parse(await fs.readFile(fileDB, 'utf8'));
+}
 
 app.listen(PORT, () => {
-    console.log('ON -', PORT)
 });
