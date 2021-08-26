@@ -36,5 +36,13 @@ module.exports = {
     } catch (e) {
       console.log(e);
     }
+  },
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await getUsers();
+      res.json(users);
+    } catch (e) {
+      console.log('All users');
+    }
   }
 };

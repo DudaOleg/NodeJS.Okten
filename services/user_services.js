@@ -6,7 +6,7 @@ const fileDB = path.join(process.cwd(), 'db', 'db.json');
 module.exports = {
   getUsers: async () => {
     try {
-      JSON.parse(await fs.readFile(fileDB, 'utf8'));
+      return JSON.parse(await fs.readFile(fileDB, 'utf8'));
     } catch (e) {
       console.log(e);
     }
