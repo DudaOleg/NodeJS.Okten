@@ -1,7 +1,7 @@
 const { getUsers } = require('../services/user_services');
 
 module.exports = {
-  userLogin: async (req, res) => {
+  userLogin: async (req, res, next) => {
     try {
       const { password, email } = req.body;
       const users = await getUsers();
@@ -13,7 +13,7 @@ module.exports = {
       }
       res.json('Hello login-false');
     } catch (e) {
-      console.log(e);
+      next(e);
     }
   }
 };
