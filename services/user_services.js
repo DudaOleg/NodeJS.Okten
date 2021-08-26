@@ -13,14 +13,14 @@ module.exports = {
   },
   readFile: async () => {
     try {
-      await fs.readFile(fileDB, 'utf8');
+      return await fs.readFile(fileDB, 'utf8');
     } catch (e) {
       console.log(e);
     }
   },
   writeFile: async () => {
     try {
-      await fs.writeFile(fileDB, JSON.stringify(users));
+      return await fs.writeFile(fileDB, JSON.stringify(users));
     } catch (e) {
       console.log(e);
     }
