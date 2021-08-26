@@ -14,8 +14,8 @@ module.exports = {
         return;
       }
       users.push(req.body);
-      await writeFile();
-      res.json('GO TO REGISTRATION');
+      await writeFile(users);
+      res.json('REGISTRATION OK - go to login');
     } catch (e) {
       console.log(e);
     }

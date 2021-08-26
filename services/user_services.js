@@ -18,7 +18,7 @@ module.exports = {
       console.log(e);
     }
   },
-  writeFile: async () => {
+  writeFile: async (users) => {
     try {
       return await fs.writeFile(fileDB, JSON.stringify(users));
     } catch (e) {
