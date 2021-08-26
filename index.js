@@ -10,15 +10,14 @@ const { loginRouter, userRouter } = require('./routers');
 
 app.use('/login', loginRouter);
 app.use('/user', userRouter);
-app.use('*', notFoundError);
-app.use(mainErrorHandler);
+app.use('*', _notFoundError);
+app.use(_mainErrorHandler);
 
 app.listen(PORT, () => {
   console.log('OK! port', PORT);
 });
 
-// next--Передай наступному обробнику;
-function notFoundError(err, req, res, next) {
+function _notFoundError(err, req, res, next) {
   next({
     status: err.status || 404,
     message: err.message || 'Not Found'
@@ -26,7 +25,7 @@ function notFoundError(err, req, res, next) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function mainErrorHandler(err, req, res, next) {
+function _mainErrorHandler(err, req, res, next) {
   res
     .status(err.status || 500)
     .json({ message: err.message });
