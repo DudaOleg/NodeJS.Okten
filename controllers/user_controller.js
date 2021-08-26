@@ -1,12 +1,11 @@
-const { readFile, getUsers, writeFile } = require('../services/user_services');
+const { getUsers, writeFile } = require('../services/user_services');
 
 module.exports = {
   createUser: async (req, res) => {
     try {
       const { email } = req.body;
-      const textFromFile = await readFile();
 
-      const users = textFromFile ? JSON.parse(textFromFile.toString()) : [];
+      const users = await getUsers();
       const user = users.find((value) => value.email === email);
 
       if (user) {
@@ -17,7 +16,7 @@ module.exports = {
       await writeFile(users);
       res.json('REGISTRATION OK - go to login');
     } catch (e) {
-      console.log(e);
+      res.status(404).res.json('Error');
     }
   },
 
@@ -34,15 +33,16 @@ module.exports = {
 
       res.json(userId);
     } catch (e) {
-      console.log(e);
+      res.status(404).res.json('Error');
     }
   },
+
   getAllUsers: async (req, res) => {
     try {
       const users = await getUsers();
       res.json(users);
     } catch (e) {
-      console.log('All users');
+      res.status(404).res.json('Error');
     }
   }
 };
