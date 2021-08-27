@@ -3,8 +3,6 @@ const {
   model
 } = require('mongoose');
 
-const { dataBaseEnum } = require('../constants');
-
 const carSchema = new Schema({
   car: {
     type: String,
@@ -25,4 +23,4 @@ const carSchema = new Schema({
   toJSON: { virtuals: true }
 });
 
-module.exports = model(dataBaseEnum.USER, carSchema);
+module.exports = model('user', carSchema);

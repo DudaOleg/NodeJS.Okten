@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { userRouter } = require('./routes');
+const { userRouter, carRouter } = require('./routes');
 const { constants } = require('./constants');
 
 const app = express();
@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use('/users', userRouter);
+app.use('/cars', carRouter);
 
 app.use('*', _notFoundError);
 app.use(_hadleErrors);

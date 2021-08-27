@@ -1,6 +1,6 @@
 module.exports = {
-  USER_NOT_FOUND: {
-    message: 'user not found',
+  NOT_FOUND: {
+    message: 'not found',
     code: 4041
   },
 
@@ -15,7 +15,7 @@ module.exports = {
   },
 
   NOT_EXISTS: {
-    message: 'Such a user already exists',
+    message: 'NOT_EXISTS',
     code: 4091
   }
 

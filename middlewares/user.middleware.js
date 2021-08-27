@@ -15,7 +15,7 @@ module.exports = {
       const users = await userService.findUser();
 
       if (!name || !email) {
-        throw new ErrorHandler(404, errorMess.USER_NOT_FOUND.message, errorMess.USER_NOT_FOUND.code);
+        throw new ErrorHandler(404, errorMess.NOT_FOUND.message, errorMess.NOT_FOUND.code);
       }
 
       if (!email.includes('@')) {
@@ -43,7 +43,7 @@ module.exports = {
       }
 
       if (!userById) {
-        throw new ErrorHandler(404, errorMess.USER_NOT_FOUND.message, errorMess.USER_NOT_FOUND.code);
+        throw new ErrorHandler(404, errorMess.NOT_FOUND.message, errorMess.NOT_FOUND.code);
       }
 
       req.user = userById;
@@ -60,7 +60,7 @@ module.exports = {
       const userById = await userService.findUserById(userId);
 
       if (!userById) {
-        throw new ErrorHandler(404, errorMess.USER_NOT_FOUND.message, errorMess.USER_NOT_FOUND.code);
+        throw new ErrorHandler(404, errorMess.NOT_FOUND.message, errorMess.NOT_FOUND.code);
       }
 
       next();
