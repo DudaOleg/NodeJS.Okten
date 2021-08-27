@@ -3,7 +3,7 @@ const {
   model
 } = require('mongoose');
 
-const { dataBaseEnum } = require('../constantsa');
+const { dataBaseEnum } = require('../constants');
 
 const carSchema = new Schema({
   car: {
