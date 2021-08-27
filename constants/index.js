@@ -1,4 +1,2 @@
-module.exports.constants = require('./constant');
+module.exports.constants = require('./constants');
 module.exports.dataBaseEnum = require('./database.enum');
-
-a;
