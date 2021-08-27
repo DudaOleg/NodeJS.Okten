@@ -1,4 +1,1 @@
-module.exports = {
-  loginController: require('./login_controller'),
-  userController: require('./user_controller')
-};
+module.exports.userController = require('./user.controller');
