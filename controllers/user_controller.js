@@ -1,4 +1,5 @@
 const { userService } = require('../services');
+const { code } = require('../errors');
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -31,7 +32,7 @@ module.exports = {
     try {
       const { user_id } = req.params;
       await userService.updateOneItem({ _id: user_id }, req.body);
-      res.status(201).json('OK-UPDATE');
+      res.status(code.OK).json('OK-UPDATE');
     } catch (e) {
       next(e);
     }
@@ -41,7 +42,7 @@ module.exports = {
     try {
       const { user_id } = req.params;
       await userService.deleteOneItem({ _id: user_id });
-      res.status(200).json('OK-delete');
+      res.status(code.CREATE).json('OK-delete');
     } catch (e) {
       next(e);
     }

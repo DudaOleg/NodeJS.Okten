@@ -1,16 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { PORT } = require('./dataBase/connect');
+const { PORT, CONNECT } = require('./dataBase/connect');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/Okten-2021');
+mongoose.connect(CONNECT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const { userRouter, carRouter } = require('./routers');
+const { code, errorMessage } = require('./errors');
 
 app.use('/cars', carRouter);
 app.use('/users', userRouter);
@@ -23,14 +24,14 @@ app.listen(PORT, () => {
 
 function _notFoundError(err, req, res, next) {
   next({
-    status: err.status || 404,
-    message: err.message || 'Not found'
+    status: err.status || code.NOT_FOUND,
+    message: err.message || errorMessage.notFound
   });
 }
 
 // eslint-disable-next-line no-unused-vars
 function _mainErrorHandler(err, req, res, next) {
   res
-    .status(err.status || 500)
+    .status(err.status || code.SERVER_ERROR)
     .json({ message: err.message });
 }

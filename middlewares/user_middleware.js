@@ -1,4 +1,4 @@
-const { ErrorHandler, errorMessage } = require('../errors');
+const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
       const { user_id } = req.params;
       const user = await userService.getById(user_id);
       if (!user) {
-        throw new ErrorHandler(404, errorMessage.notFoundUser);
+        throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);
       }
       req.user = user;
       next();
@@ -22,7 +22,7 @@ module.exports = {
       const findByEmail = await userService.getOneItem({ email });
 
       if (findByEmail) {
-        throw new ErrorHandler(409, errorMessage.emailIsUsed);
+        throw new ErrorHandler(code.IS_USED, errorMessage.emailIsUsed);
       }
 
       next();
@@ -38,10 +38,10 @@ module.exports = {
       } = req.body;
 
       if (!name || !surname || !age || !email || !password) {
-        throw new ErrorHandler(401, errorMessage.notValidField);
+        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidField);
       }
       if (!email.includes('@')) {
-        throw new ErrorHandler(401, errorMessage.specialSymbol);
+        throw new ErrorHandler(code.NOT_VALID, errorMessage.specialSymbol);
       }
 
       next();

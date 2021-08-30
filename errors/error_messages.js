@@ -19,4 +19,8 @@ module.exports = {
     message: 'not found car'
   },
 
+  notFound: {
+    message: 'not found'
+  }
+
 };

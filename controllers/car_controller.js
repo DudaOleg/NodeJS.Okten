@@ -1,4 +1,5 @@
 const { carService } = require('../services');
+const { code } = require('../errors');
 
 module.exports = {
   createCar: async (req, res, next) => {
@@ -30,7 +31,7 @@ module.exports = {
   updateCar: async (req, res, next) => {
     try {
       await carService.updateOneItem({ _id: req.car_id }, req.body);
-      res.status(201).json('OK-UPDATE');
+      res.status(code.OK).json('OK-UPDATE');
     } catch (e) {
       next(e);
     }
@@ -39,7 +40,7 @@ module.exports = {
   deleteCar: async (req, res, next) => {
     try {
       await carService.deleteOneItem({ _id: req.car });
-      res.status(200).json('OK-DELETE');
+      res.status(code.CREATE).json('OK-DELETE');
     } catch (e) {
       next(e);
     }
