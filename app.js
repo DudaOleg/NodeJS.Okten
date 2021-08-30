@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { PORT } = require('./dataBase/connect');
+const { PORT, CONNECT } = require('./dataBase/connect');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/Okten-2021');
+mongoose.connect(CONNECT);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
