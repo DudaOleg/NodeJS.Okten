@@ -1,50 +1,36 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-const { userRouter, carRouter } = require('./routes');
-const { constants } = require('./constants');
+const { PORT } = require('./dataBase/connect');
 
 const app = express();
 
-_connectDB();
+mongoose.connect('mongodb://localhost:27017/Okten-2021');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/users', userRouter);
+const { userRouter, carRouter } = require('./routers');
+
 app.use('/cars', carRouter);
-
+app.use('/users', userRouter);
 app.use('*', _notFoundError);
-app.use(_hadleErrors);
+app.use(_mainErrorHandler);
 
-app.listen(constants.PORT, () => {
-  console.log(constants.PORT);
+app.listen(PORT, () => {
+  console.log('Ok port', PORT);
 });
 
-function _connectDB() {
-  mongoose.connect(constants.DB, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-    .then(() => console.log('bd ok'))
-    .catch((error) => console.log(error));
-}
-
 function _notFoundError(err, req, res, next) {
-  next(
-    {
-      status: err.status || 404,
-      message: err.message || 'Not found'
-    }
-  );
+  next({
+    status: err.status || 404,
+    message: err.message || 'Not found'
+  });
 }
 
 // eslint-disable-next-line no-unused-vars
-function _hadleErrors(err, req, res, next) {
+function _mainErrorHandler(err, req, res, next) {
   res
-    .status(err.status)
-    .json({
-      message: err.message || 'Unknown error',
-      customCode: err.code || 500
-    });
+    .status(err.status || 500)
+    .json({ message: err.message });
 }
