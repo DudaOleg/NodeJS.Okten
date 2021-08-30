@@ -5,9 +5,9 @@ const {
     createUser, getAllUsers, updateUser, deleteUser, getSingleUser
   }
 } = require('../controllers');
-const { userMiddleware: { isValidData, isUserPresent, checkEmail } } = require('../middlewares');
+const { userMiddleware: { validateUserBody, isUserPresent, checkEmail } } = require('../middlewares');
 
-router.post('/', isValidData, checkEmail, createUser);
+router.post('/', validateUserBody, checkEmail, createUser);
 router.get('/', getAllUsers);
 router.get('/:user_id', isUserPresent, getSingleUser);
 router.patch('/:user_id', isUserPresent, updateUser);

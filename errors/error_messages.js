@@ -19,4 +19,11 @@ module.exports = {
     message: 'not found car'
   },
 
+  notFound: {
+    message: 'not found'
+  },
+
+  wrongEmailOrPass: {
+    message: 'Wrong email or password'
+  }
 };

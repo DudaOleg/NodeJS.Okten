@@ -14,13 +14,13 @@ const userSchema = new Schema({
   },
   age: {
     type: Number,
-    required: true,
     trim: true
   },
 
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false
   },
 
   email: {

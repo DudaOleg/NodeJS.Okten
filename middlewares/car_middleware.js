@@ -1,5 +1,5 @@
 const { carService } = require('../services');
-const { ErrorHandler, errorMessage } = require('../errors');
+const { ErrorHandler, errorMessage, code } = require('../errors');
 
 module.exports = {
   isCarPresent: async (req, res, next) => {
@@ -8,7 +8,7 @@ module.exports = {
       const findCarById = await carService.getById(car_id);
 
       if (!findCarById) {
-        throw new ErrorHandler(404, errorMessage.notFoundCar);
+        throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundCar);
       }
       req.car_id = findCarById;
       next();
@@ -22,7 +22,7 @@ module.exports = {
       const { car, model, price } = req.body;
 
       if (!car || !model || !price) {
-        throw new ErrorHandler(401, errorMessage.notValidField);
+        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidField);
       }
       next();
     } catch (e) {

@@ -1,5 +1,6 @@
-const { ErrorHandler, errorMessage } = require('../errors');
+const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
+const { createUserValidator } = require('../validators/user_validator');
 
 module.exports = {
   isUserPresent: async (req, res, next) => {
@@ -7,7 +8,7 @@ module.exports = {
       const { user_id } = req.params;
       const user = await userService.getById(user_id);
       if (!user) {
-        throw new ErrorHandler(404, errorMessage.notFoundUser);
+        throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);
       }
       req.user = user;
       next();
@@ -22,7 +23,7 @@ module.exports = {
       const findByEmail = await userService.getOneItem({ email });
 
       if (findByEmail) {
-        throw new ErrorHandler(409, errorMessage.emailIsUsed);
+        throw new ErrorHandler(code.IS_USED, errorMessage.emailIsUsed);
       }
 
       next();
@@ -31,19 +32,13 @@ module.exports = {
     }
   },
 
-  isValidData: (req, res, next) => {
+  validateUserBody: (req, res, next) => {
     try {
-      const {
-        name, surname, age, email, password
-      } = req.body;
+      const { error } = createUserValidator.validate(req.body);
 
-      if (!name || !surname || !age || !email || !password) {
-        throw new ErrorHandler(401, errorMessage.notValidField);
+      if (error) {
+        throw new ErrorHandler(code.BAD_REQUEST, error.details[0].message);
       }
-      if (!email.includes('@')) {
-        throw new ErrorHandler(401, errorMessage.specialSymbol);
-      }
-
       next();
     } catch (e) {
       next(e);
