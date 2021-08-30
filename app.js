@@ -10,9 +10,10 @@ mongoose.connect(CONNECT);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const { userRouter, carRouter } = require('./routers');
+const { userRouter, carRouter, authRouter } = require('./routers');
 const { code, errorMessage } = require('./errors');
 
+app.use('/authorization', authRouter);
 app.use('/cars', carRouter);
 app.use('/users', userRouter);
 app.use('*', _notFoundError);
