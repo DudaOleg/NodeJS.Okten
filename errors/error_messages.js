@@ -3,7 +3,7 @@ module.exports = {
     message: 'not found user'
   },
 
-  emailIsUsed: {
+  emailOrLoginIsUsed: {
     message: 'email or login is used'
   },
 

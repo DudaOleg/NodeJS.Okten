@@ -29,8 +29,9 @@ module.exports = {
       }
 
       await compare(findLogin.password, password);
-
-      req.user = findLogin;
+      const withoutPass = findLogin.toObject({ getters: true });
+      delete withoutPass.password;
+      req.user = withoutPass;
 
       next();
     } catch (err) {

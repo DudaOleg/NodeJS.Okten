@@ -24,9 +24,8 @@ module.exports = {
       const findByLogin = await userService.getOneItem({ login });
 
       if (findByEmail || findByLogin) {
-        throw new ErrorHandler(code.IS_USED, errorMessage.emailIsUsed);
+        throw new ErrorHandler(code.IS_USED, errorMessage.emailOrLoginIsUsed);
       }
-
       next();
     } catch (e) {
       next(e);
@@ -38,7 +37,7 @@ module.exports = {
       const { error } = createUserValidator.validate(req.body);
 
       if (error) {
-        throw new ErrorHandler(code.BAD_REQUEST, error.details[0].message);
+        throw new ErrorHandler(code.BAD_REQUEST, error.details[0].context);
       }
       next();
     } catch (e) {
