@@ -22,7 +22,7 @@ const createUserValidator = Joi.object({
 });
 
 const updateUserValidator = Joi.object({
-  name: Joi.string().alphanum().min(3).max(30).required(),
+  name: Joi.string().alphanum().min(3).max(30),
   email: Joi.string().regex(EMAIL_REGEXP)
 });
 
