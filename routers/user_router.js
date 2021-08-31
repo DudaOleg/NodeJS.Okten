@@ -7,11 +7,11 @@ const {
 } = require('../controllers');
 const {
   userMiddleware: {
-    validBody, isUserPresent, checkEmail, validUpdateBody
+    validBody, isUserPresent, checkEmailOrLogin, validUpdateBody
   }
 } = require('../middlewares');
 
-router.post('/', validBody, checkEmail, createUser);
+router.post('/', validBody, checkEmailOrLogin, createUser);
 router.get('/', getAllUsers);
 router.get('/:user_id', isUserPresent, getSingleUser);
 router.patch('/:user_id', validUpdateBody, isUserPresent, updateUser);

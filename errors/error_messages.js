@@ -4,7 +4,7 @@ module.exports = {
   },
 
   emailIsUsed: {
-    message: 'email is used'
+    message: 'email or login is used'
   },
 
   notValidField: {

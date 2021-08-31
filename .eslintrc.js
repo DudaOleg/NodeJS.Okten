@@ -43,7 +43,7 @@ module.exports = {
     'max-classes-per-file': 'off',
     'newline-per-chained-call': [
       'error',
-      { ignoreChainWithDepth: 6 }
+      { ignoreChainWithDepth: 7 }
     ],
     'new-parens': 'error',
     'no-alert': 'error',

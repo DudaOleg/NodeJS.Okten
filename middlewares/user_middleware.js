@@ -17,12 +17,13 @@ module.exports = {
     }
   },
 
-  checkEmail: async (req, res, next) => {
+  checkEmailOrLogin: async (req, res, next) => {
     try {
-      const { email } = req.body;
+      const { email, login } = req.body;
       const findByEmail = await userService.getOneItem({ email });
+      const findByLogin = await userService.getOneItem({ login });
 
-      if (findByEmail) {
+      if (findByEmail || findByLogin) {
         throw new ErrorHandler(code.IS_USED, errorMessage.emailIsUsed);
       }
 
