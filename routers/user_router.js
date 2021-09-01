@@ -7,14 +7,18 @@ const {
 } = require('../controllers');
 const {
   userMiddleware: {
-    validBody, isUserPresent, checkEmailOrLogin, validUpdateBody, checkUserRole
+    validBody, checkOn, checkUniqueEmailOrLogin, validUpdateBody, checkUserRole
   }
 } = require('../middlewares');
 
-router.post('/', validBody, checkEmailOrLogin, createUser);
+const { ID, PARAMS, USER_ID } = require('./variables');
+
+const { userRoles: { ADMIN } } = require('../dataBase');
+
+router.post('/', validBody, checkUniqueEmailOrLogin, createUser);
 router.get('/', getAllUsers);
-router.get('/:user_id', isUserPresent, getSingleUser);
-router.patch('/:user_id', validUpdateBody, isUserPresent, updateUser);
-router.delete('/:user_id', isUserPresent, checkUserRole(['admin']), deleteUser);
+router.get('/:user_id', checkOn(USER_ID, PARAMS, ID), getSingleUser);
+router.patch('/:user_id', validUpdateBody, checkOn(USER_ID, PARAMS, ID), updateUser);
+router.delete('/:user_id', checkOn(USER_ID, PARAMS, ID), checkUserRole([ADMIN]), deleteUser);
 
 module.exports = router;
