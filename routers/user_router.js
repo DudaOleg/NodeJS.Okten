@@ -7,7 +7,7 @@ const {
 } = require('../controllers');
 const {
   userMiddleware: {
-    validBody, isUserPresent, checkEmailOrLogin, validUpdateBody
+    validBody, isUserPresent, checkEmailOrLogin, validUpdateBody, checkUserRole
   }
 } = require('../middlewares');
 
@@ -15,6 +15,6 @@ router.post('/', validBody, checkEmailOrLogin, createUser);
 router.get('/', getAllUsers);
 router.get('/:user_id', isUserPresent, getSingleUser);
 router.patch('/:user_id', validUpdateBody, isUserPresent, updateUser);
-router.delete('/:user_id', isUserPresent, deleteUser);
+router.delete('/:user_id', isUserPresent, checkUserRole(['admin']), deleteUser);
 
 module.exports = router;

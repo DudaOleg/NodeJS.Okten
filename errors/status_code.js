@@ -5,5 +5,6 @@ module.exports = {
   NOT_VALID: 401,
   NOT_FOUND: 404,
   IS_USED: 409,
-  SERVER_ERROR: 500
+  SERVER_ERROR: 500,
+  FORBIDDEN: 403
 };

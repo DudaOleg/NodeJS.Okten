@@ -29,5 +29,9 @@ module.exports = {
 
   wrongLoginOrPass: {
     message: 'Wrong login or password'
+  },
+
+  forbidden: {
+    message: 'forbidden'
   }
 };

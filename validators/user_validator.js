@@ -9,7 +9,7 @@ const createUserValidator = Joi.object({
   password: Joi.string().regex(PASSWORD_REGEXP).required(),
   email: Joi.string().regex(EMAIL_REGEXP).trim().required(),
   born_year: Joi.number().min(CURRENT_YEAR - 120).max(CURRENT_YEAR - 6),
-  role: Joi.string().allow(...Object.values(userRolesEnum)),
+  roles: Joi.string().allow(...Object.values(userRolesEnum)),
 //
 // const girlValidator = Joi.object({
 //   name: Joi.string(),
