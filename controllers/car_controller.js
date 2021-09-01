@@ -1,10 +1,14 @@
 const { carService } = require('../services');
-const { code } = require('../errors');
+const {
+  code,
+  errorMessage
+} = require('../errors');
 
 module.exports = {
   createCar: async (req, res, next) => {
     try {
       const newCar = await carService.createCar(req.body);
+
       res.json(newCar);
     } catch (e) {
       next(e);
@@ -22,6 +26,7 @@ module.exports = {
   getAllCar: async (req, res, next) => {
     try {
       const cars = await carService.getAllItems();
+
       res.json(cars);
     } catch (e) {
       next(e);
@@ -31,7 +36,8 @@ module.exports = {
   updateCar: async (req, res, next) => {
     try {
       await carService.updateOneItem({ _id: req.car_id }, req.body);
-      res.status(code.OK).json('OK-UPDATE');
+
+      res.status(code.OK).json(errorMessage.ok);
     } catch (e) {
       next(e);
     }
@@ -40,7 +46,8 @@ module.exports = {
   deleteCar: async (req, res, next) => {
     try {
       await carService.deleteOneItem({ _id: req.car });
-      res.status(code.CREATE).json('OK-DELETE');
+
+      res.status(code.DELETE).json(errorMessage.ok);
     } catch (e) {
       next(e);
     }

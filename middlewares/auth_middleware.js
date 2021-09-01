@@ -1,7 +1,6 @@
 const { ErrorHandler, errorMessage, code } = require('../errors');
-const { authService } = require('../services');
+const { authService, passwordService: { compare } } = require('../services');
 const { authValidator: { validAuth } } = require('../validators');
-const { compare } = require('../services/password_service');
 
 module.exports = {
 

@@ -33,5 +33,9 @@ module.exports = {
 
   forbidden: {
     message: 'forbidden'
+  },
+
+  ok: {
+    message: 'ok'
   }
 };

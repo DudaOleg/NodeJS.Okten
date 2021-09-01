@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const { PASSWORD_REGEXP } = require('./variables');
 
 const validAuth = Joi.object({

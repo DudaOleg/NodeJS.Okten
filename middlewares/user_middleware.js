@@ -12,28 +12,6 @@ const {
 } = require('../validators');
 
 module.exports = {
-  checkEmailOrLogin: async (req, res, next) => {
-    try {
-      const {
-        email,
-        login
-      } = req.body;
-      const findByEmailOrLogin = await userService.getOneItem({
-        $or: [
-          { email },
-          { login }
-        ]
-      });
-
-      if (findByEmailOrLogin) {
-        throw new ErrorHandler(code.IS_USED, errorMessage.emailOrLoginIsUsed);
-      }
-      next();
-    } catch (e) {
-      next(e);
-    }
-  },
-
   validBody: (req, res, next) => {
     try {
       const { error } = createUserValidator.validate(req.body);
