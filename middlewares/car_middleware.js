@@ -1,6 +1,7 @@
 const { carService } = require('../services');
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const { carValidator: { carValidator } } = require('../validators');
+const { updateCarValidator } = require('../validators/car_validator');
 
 module.exports = {
   isCarPresent: async (req, res, next) => {
@@ -21,6 +22,19 @@ module.exports = {
   isValidField: (req, res, next) => {
     try {
       const { error } = carValidator.validate(req.body);
+
+      if (error) {
+        throw new ErrorHandler(code.BAD_REQUEST, error.details[0].message);
+      }
+      next();
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  validUpdateBody: (req, res, next) => {
+    try {
+      const { error } = updateCarValidator.validate(req.body);
 
       if (error) {
         throw new ErrorHandler(code.BAD_REQUEST, error.details[0].message);

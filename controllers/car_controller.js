@@ -37,7 +37,7 @@ module.exports = {
     try {
       await carService.updateOneItem({ _id: req.car_id }, req.body);
 
-      res.status(code.OK).json(errorMessage.ok);
+      res.status(code.CREATE).json(errorMessage.ok);
     } catch (e) {
       next(e);
     }

@@ -46,7 +46,7 @@ module.exports = {
       const { user_id } = req.params;
       await userService.updateOneItem({ _id: user_id }, req.body);
 
-      res.status(code.OK)
+      res.status(code.CREATE)
         .json(errorMessage.ok);
     } catch (e) {
       next(e);

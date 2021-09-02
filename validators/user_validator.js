@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const { CURRENT_YEAR, PASSWORD_REGEXP, EMAIL_REGEXP } = require('./variables');
-const userRolesEnum = require('../dataBase/user_roles_enum');
+const { userRoles: { userRolesEnum } } = require('../dataBase');
 
 const createUserValidator = Joi.object({
   login: Joi.string().alphanum().min(3).max(30).trim().required(),
@@ -15,6 +15,7 @@ const createUserValidator = Joi.object({
 
 const updateUserValidator = Joi.object({
   name: Joi.string().alphanum().min(3).max(30),
+  surname: Joi.string().alphanum().min(3).max(30).trim(),
   email: Joi.string().regex(EMAIL_REGEXP)
 });
 
