@@ -4,15 +4,17 @@ const { carValidator: { carValidator } } = require('../validators');
 const { updateCarValidator } = require('../validators/car_validator');
 
 module.exports = {
-  isCarPresent: async (req, res, next) => {
+  checkOnCar: (params, searchIn, dbField = params) => async (req, res, next) => {
     try {
-      const { car_id } = req.params;
-      const findCarById = await carService.getById(car_id);
+      const value = req[searchIn][params];
 
-      if (!findCarById) {
-        throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundCar);
+      const car = await carService.getById({ [dbField]: value });
+
+      if (!car) {
+        throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);
       }
-      req.car_id = findCarById;
+
+      req.car = car;
       next();
     } catch (e) {
       next(e);

@@ -36,11 +36,11 @@ const userSchema = new Schema({
     required: true,
     trim: true
   },
-  roles: {
+  role: {
     type: String,
     default: userRolesEnum.USER,
     enum: Object.values(userRolesEnum)
   }
 }, { timestamps: true });
 
-module.exports = model('users', userSchema);
+module.exports = model(userRolesEnum.USER, userSchema);

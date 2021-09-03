@@ -17,7 +17,7 @@ module.exports = {
 
       const withoutPass = newUser.toObject({ getters: true });
       delete withoutPass.password;
-      res.json(withoutPass);
+      res.status(code.CREATE).json(withoutPass);
     } catch (e) {
       next(e);
     }

@@ -9,7 +9,7 @@ module.exports = {
     try {
       const newCar = await carService.createCar(req.body);
 
-      res.json(newCar);
+      res.status(code.CREATE).json(newCar);
     } catch (e) {
       next(e);
     }
