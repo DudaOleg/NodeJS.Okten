@@ -36,7 +36,7 @@ module.exports = {
 
   refresh: async (req, res, next) => {
     try {
-      const refreshToken = req.ge(AUTHORIZATION);
+      const refreshToken = req.get(AUTHORIZATION);
       const { _id } = req.refreshTokenUser;
 
       await authService.deleteOneToken({

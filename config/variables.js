@@ -7,6 +7,7 @@ module.exports = {
   ID: '_id',
   PARAMS: 'params',
   PASSWORD_REGEXP: new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/),
+  REFRESH: 'refresh',
   USER: 'user',
   USER_ID: 'user_id',
 };

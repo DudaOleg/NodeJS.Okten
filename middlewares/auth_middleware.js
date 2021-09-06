@@ -1,4 +1,4 @@
-const { variables: { USER, AUTHORIZATION } } = require('../config');
+const { variables: { USER, AUTHORIZATION, REFRESH } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const { authService, passwordService: { compare }, jwtService: { verifyToken } } = require('../services');
 const { authValidator: { validAuth } } = require('../validators');
@@ -75,7 +75,7 @@ module.exports = {
       if (!refreshToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
-      await verifyToken(refreshToken);
+      await verifyToken(refreshToken, REFRESH);
 
       const findToken = await authService.getOneToken({
         refreshToken
