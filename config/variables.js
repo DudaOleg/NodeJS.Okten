@@ -1,5 +1,6 @@
 module.exports = {
   ADMIN: 'admin',
+  ACCESS: 'access',
   AUTHORIZATION: 'Authorization',
   CAR_ID: 'car_id',
   CURRENT_YEAR: new Date().getFullYear(),
