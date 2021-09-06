@@ -3,14 +3,16 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-const { PORT, CONNECT } = require('./dataBase/connect');
+const { constEnv: { PORT, CONNECT } } = require('./config');
 
 const app = express();
 
 mongoose.connect(CONNECT);
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 
 const { userRouter, carRouter, authRouter } = require('./routers');
 const { code, errorMessage } = require('./errors');
@@ -36,5 +38,7 @@ function _notFoundError(err, req, res, next) {
 function _mainErrorHandler(err, req, res, next) {
   res
     .status(err.status || code.SERVER_ERROR)
-    .json({ message: err.message });
+    .json({
+      message: err.message
+    });
 }

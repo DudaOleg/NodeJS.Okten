@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+
 const { CARS } = require('./dataBaseName');
 
 const carSchema = new Schema({

@@ -1,11 +1,5 @@
-const {
-  userService,
-  passwordService
-} = require('../services');
-const {
-  code,
-  errorMessage
-} = require('../errors');
+const { code, errorMessage } = require('../errors');
+const { userService, passwordService } = require('../services');
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -21,8 +15,6 @@ module.exports = {
         getters: false
       });
       delete withoutPass.password;
-      console.log(withoutPass, '-------------');
-      console.log(newUser, '-------------');
       res.status(code.CREATE).json(withoutPass);
     } catch (e) {
       next(e);
@@ -31,7 +23,7 @@ module.exports = {
 
   getSingleUser: (req, res, next) => {
     try {
-      res.json(req.user);
+      res.json(req.checkOnuser);
     } catch (e) {
       next(e);
     }

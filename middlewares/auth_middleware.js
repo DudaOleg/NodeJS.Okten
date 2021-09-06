@@ -1,8 +1,7 @@
+const { variables: { USER, AUTHORIZATION } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
-const { authService, passwordService: { compare } } = require('../services');
-const { verifyToken } = require('../services/jwt_service');
+const { authService, passwordService: { compare }, jwtService: { verifyToken } } = require('../services');
 const { authValidator: { validAuth } } = require('../validators');
-const { authorization } = require('./variables');
 
 module.exports = {
 
@@ -47,19 +46,23 @@ module.exports = {
 
   accessToken: async (req, res, next) => {
     try {
-      const accessToken = req.get(authorization);
+      const accessToken = req.get(AUTHORIZATION);
+
       if (!accessToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
+
       await verifyToken(accessToken);
 
-      const findToken = await authService.getOneItem({
+      const findToken = await authService.getOneToken({
         accessToken
-      });
+      }).populate(USER);
 
       if (!findToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
+
+      req.accessTokenUser = findToken.user;
       next();
     } catch (err) {
       next(err);
@@ -68,21 +71,21 @@ module.exports = {
 
   refreshToken: async (req, res, next) => {
     try {
-      const refreshToken = req.get(authorization);
+      const refreshToken = req.get(AUTHORIZATION);
       if (!refreshToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
       await verifyToken(refreshToken);
 
-      const findToken = await authService.getOneItem({
+      const findToken = await authService.getOneToken({
         refreshToken
-      }).populate('user');
+      }).populate(USER);
 
       if (!findToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      req.user = findToken.user;
+      req.refreshTokenUser = findToken.user;
 
       next();
     } catch (err) {

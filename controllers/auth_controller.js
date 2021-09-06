@@ -1,6 +1,6 @@
-const { jwtService, authService } = require('../services');
-const { AUTHORIZATION } = require('../routers/variables');
+const { variables: { AUTHORIZATION } } = require('../config');
 const { errorMessage, code } = require('../errors');
+const { jwtService, authService } = require('../services');
 
 module.exports = {
   loginUser: async (req, res, next) => {
@@ -24,7 +24,7 @@ module.exports = {
     try {
       const accessToken = req.ge(AUTHORIZATION);
 
-      await authService.getOneItem({
+      await authService.deleteOneToken({
         accessToken
       });
 
@@ -37,7 +37,7 @@ module.exports = {
   refresh: async (req, res, next) => {
     try {
       const refreshToken = req.ge(AUTHORIZATION);
-      const { _id } = req.user;
+      const { _id } = req.refreshTokenUser;
 
       await authService.deleteOneToken({
         refreshToken
@@ -49,8 +49,8 @@ module.exports = {
         ...tokenPair, user: _id
       });
 
-      res.json({
-        ...tokenPair, user: req.user
+      res.status(code.CREATE).json({
+        ...tokenPair, user: req.refreshTokenUser
       });
     } catch (e) {
       next(e);

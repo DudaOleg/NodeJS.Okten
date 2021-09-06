@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const { CURRENT_YEAR, PASSWORD_REGEXP, EMAIL_REGEXP } = require('./variables');
+const { variables: { CURRENT_YEAR, PASSWORD_REGEXP, EMAIL_REGEXP } } = require('../config');
 const { userRoles } = require('../dataBase');
 
 const createUserValidator = Joi.object({
@@ -19,4 +19,6 @@ const updateUserValidator = Joi.object({
   email: Joi.string().regex(EMAIL_REGEXP)
 });
 
-module.exports = { createUserValidator, updateUserValidator };
+module.exports = {
+  createUserValidator, updateUserValidator
+};

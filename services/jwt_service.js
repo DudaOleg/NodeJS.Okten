@@ -1,19 +1,17 @@
 const jwt = require('jsonwebtoken');
 
 const { promisify } = require('util');
-const { AccessSecretKey, RefreshSecretKey } = require('./variables');
-const { ErrorHandler,
-  code,
-  errorMessage } = require('../errors');
+const { constEnv: { ACCESSSECRETKEY, REFRESHSECRETKEY } } = require('../config');
+const { ErrorHandler, code, errorMessage } = require('../errors');
 
 module.exports = {
   generateTokenPair: () => {
     const accessToken = jwt.sign({
-    }, AccessSecretKey, {
+    }, ACCESSSECRETKEY, {
       expiresIn: '15m'
     });
     const refreshToken = jwt.sign({
-    }, RefreshSecretKey, {
+    }, REFRESHSECRETKEY, {
       expiresIn: '120m'
     });
 
@@ -25,7 +23,7 @@ module.exports = {
 
   verifyToken: async (token, tokenType = 'access') => {
     try {
-      const secret = tokenType === 'access' ? AccessSecretKey : RefreshSecretKey;
+      const secret = tokenType === 'access' ? ACCESSSECRETKEY : REFRESHSECRETKEY;
 
       const verify = promisify(jwt.verify);
       await verify(token, secret);

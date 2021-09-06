@@ -1,14 +1,15 @@
-const { carService } = require('../services');
 const { ErrorHandler, errorMessage, code } = require('../errors');
-const { carValidator: { carValidator } } = require('../validators');
-const { updateCarValidator } = require('../validators/car_validator');
+const { carService } = require('../services');
+const { carValidator: { carValidator, updateCarValidator } } = require('../validators');
 
 module.exports = {
   checkOnCar: (params, searchIn, dbField = params) => async (req, res, next) => {
     try {
       const value = req[searchIn][params];
 
-      const car = await carService.getById({ [dbField]: value });
+      const car = await carService.getById({
+        [dbField]: value
+      });
 
       if (!car) {
         throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);

@@ -1,15 +1,6 @@
-const {
-  ErrorHandler,
-  errorMessage,
-  code
-} = require('../errors');
+const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
-const {
-  userValidator: {
-    createUserValidator,
-    updateUserValidator
-  }
-} = require('../validators');
+const { userValidator: { createUserValidator, updateUserValidator } } = require('../validators');
 
 module.exports = {
   validBody: (req, res, next) => {
@@ -44,12 +35,13 @@ module.exports = {
       const {
         role,
         _id
-      } = req.user;
+      } = req.accessTokenUser;
       const { user_id } = req.params;
 
-      if (!role.length) {
+      if (!roleArray.length) {
         return next();
       }
+
       if (_id.toString() === user_id) {
         return next();
       }
@@ -76,7 +68,7 @@ module.exports = {
         throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);
       }
 
-      req.user = user;
+      req.checkOnuser = user;
       next();
     } catch (e) {
       next(e);
