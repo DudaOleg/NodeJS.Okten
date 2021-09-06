@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const { CARS } = require('./dataBaseName');
 
 const carSchema = new Schema({
   car: {
@@ -19,6 +20,8 @@ const carSchema = new Schema({
     trim: true,
     required: true
   }
-}, { timestamps: true });
+}, {
+  timestamps: true
+});
 
-module.exports = model('cars', carSchema);
+module.exports = model(CARS, carSchema);

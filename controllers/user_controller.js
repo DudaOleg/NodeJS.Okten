@@ -13,10 +13,16 @@ module.exports = {
       const { password } = req.body;
       const hashedPassword = await passwordService.hash(password);
 
-      const newUser = await userService.createUser({ ...req.body, password: hashedPassword });
+      const newUser = await userService.createUser({
+        ...req.body, password: hashedPassword
+      });
 
-      const withoutPass = newUser.toObject({ getters: true });
+      const withoutPass = newUser.toObject({
+        getters: false
+      });
       delete withoutPass.password;
+      console.log(withoutPass, '-------------');
+      console.log(newUser, '-------------');
       res.status(code.CREATE).json(withoutPass);
     } catch (e) {
       next(e);
@@ -44,7 +50,9 @@ module.exports = {
   updateUser: async (req, res, next) => {
     try {
       const { user_id } = req.params;
-      await userService.updateOneItem({ _id: user_id }, req.body);
+      await userService.updateOneItem({
+        _id: user_id
+      }, req.body);
 
       res.status(code.CREATE)
         .json(errorMessage.ok);
@@ -56,7 +64,9 @@ module.exports = {
   deleteUser: async (req, res, next) => {
     try {
       const { user_id } = req.params;
-      await userService.deleteOneItem({ _id: user_id });
+      await userService.deleteOneItem({
+        _id: user_id
+      });
 
       res.status(code.DELETE)
         .json(errorMessage.ok);

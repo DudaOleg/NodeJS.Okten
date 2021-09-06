@@ -37,5 +37,9 @@ module.exports = {
 
   ok: {
     message: 'ok'
+  },
+
+  notValidToken: {
+    message: 'not valid token'
   }
 };

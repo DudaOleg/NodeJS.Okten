@@ -39,15 +39,22 @@ module.exports = {
     }
   },
 
-  checkUserRole: (rolesArray = []) => (req, res, next) => {
+  checkUserRole: (roleArray = []) => (req, res, next) => {
     try {
-      const { roles } = req.user;
+      const {
+        role,
+        _id
+      } = req.user;
+      const { user_id } = req.params;
 
-      if (!roles.length) {
+      if (!role.length) {
+        return next();
+      }
+      if (_id.toString() === user_id) {
         return next();
       }
 
-      if (!rolesArray.includes(roles)) {
+      if (!roleArray.includes(role)) {
         throw new ErrorHandler(code.FORBIDDEN, errorMessage.forbidden);
       }
 
@@ -61,7 +68,9 @@ module.exports = {
     try {
       const value = req[searchIn][params];
 
-      const user = await userService.getById({ [dbField]: value });
+      const user = await userService.getById({
+        [dbField]: value
+      });
 
       if (!user) {
         throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);
@@ -83,8 +92,12 @@ module.exports = {
 
       const user = await userService.getOneItem({
         $or: [
-          { email },
-          { login }
+          {
+            email
+          },
+          {
+            login
+          }
         ]
       });
 
@@ -97,6 +110,5 @@ module.exports = {
       next(e);
     }
   },
-
 
 };
