@@ -41,5 +41,9 @@ module.exports = {
 
   notValidToken: {
     message: 'not valid token'
+  },
+
+  TemplateNotFound: {
+    message: 'Template not found'
   }
 };

@@ -36,7 +36,7 @@ module.exports = {
         getters: false
       });
       delete withoutPass.password;
-      req.user = withoutPass;
+      req.authorization = withoutPass;
 
       next();
     } catch (err) {

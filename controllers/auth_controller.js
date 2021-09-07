@@ -1,19 +1,23 @@
-const { variables: { AUTHORIZATION } } = require('../config');
+const { variables: { AUTHORIZATION }, emailActionsEnum: { WELCOME } } = require('../config');
 const { errorMessage, code } = require('../errors');
-const { jwtService, authService } = require('../services');
+const { jwtService, authService, emailService } = require('../services');
 
 module.exports = {
   loginUser: async (req, res, next) => {
     try {
-      const { _id } = req.user;
+      const { _id } = req.authorization;
       const tokenPair = jwtService.generateTokenPair();
 
       await authService.createToken({
         ...tokenPair, user: _id
       });
 
+      await emailService.sendMail('oleg.duda.mail@gmail.com', WELCOME, {
+        userName: req.authorization.name
+      });
+
       res.json({
-        ...tokenPair, user: req.user
+        ...tokenPair, user: req.authorization
       });
     } catch (e) {
       next(e);
@@ -22,7 +26,7 @@ module.exports = {
 
   logOutUser: async (req, res, next) => {
     try {
-      const accessToken = req.ge(AUTHORIZATION);
+      const accessToken = req.get(AUTHORIZATION);
 
       await authService.deleteOneToken({
         accessToken

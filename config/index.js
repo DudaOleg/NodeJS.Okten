@@ -1,4 +1,5 @@
 module.exports = {
-  variables: require('./variables'),
-  constEnv: require('./constEnv')
+  constEnv: require('./constEnv'),
+  emailActionsEnum: require('./email_actions_enum'),
+  variables: require('./variables')
 };

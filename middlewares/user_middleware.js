@@ -68,7 +68,7 @@ module.exports = {
         throw new ErrorHandler(code.NOT_FOUND, errorMessage.notFoundUser);
       }
 
-      req.checkOnuser = user;
+      req.checkOnUser = user;
       next();
     } catch (e) {
       next(e);
@@ -96,7 +96,7 @@ module.exports = {
       if (user) {
         throw new ErrorHandler(code.IS_USED, errorMessage.emailOrLoginIsUsed);
       }
-
+      req.checkEmailorLogin = req.body;
       next();
     } catch (e) {
       next(e);
