@@ -22,7 +22,7 @@ module.exports = {
 
   logOutUser: async (req, res, next) => {
     try {
-      const accessToken = req.ge(AUTHORIZATION);
+      const accessToken = req.get(AUTHORIZATION);
 
       await authService.deleteOneToken({
         accessToken
