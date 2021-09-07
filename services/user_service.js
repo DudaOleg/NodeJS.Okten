@@ -1,5 +1,5 @@
 const { userDataBase } = require('../dataBase');
-const { emailService } = require('./email_service');
+const { sendMail } = require('./email_service');
 
 module.exports = {
   createUser: (item) => userDataBase.create(item),
@@ -9,7 +9,7 @@ module.exports = {
   deleteOneItem: (item) => userDataBase.deleteOne(item),
   updateOneItem: (item, data) => userDataBase.updateOne(item, data),
   deleteWithMail: async (emailActions, req, emailUser) => {
-    await emailService.sendMail(emailUser, emailActions, {
+    await sendMail(emailUser, emailActions, {
       userName: req
     });
   }

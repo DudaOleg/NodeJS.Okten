@@ -1,6 +1,6 @@
 const { code, errorMessage } = require('../errors');
 const { emailService, userService, passwordService } = require('../services');
-const { emailActionsEnum: { CREATE, UPDATE, DELETE_USER, DELETE_ADMIN } } = require('../config');
+const { emailActionsEnum: { CREATE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL } } = require('../config');
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -17,7 +17,7 @@ module.exports = {
       });
       delete withoutPass.password;
 
-      await emailService.sendMail('oleg.duda.mail@gmail.com', CREATE, {
+      await emailService.sendMail(TEST_MAIL, CREATE, {
         userName: req.checkEmailorLogin.name
       });
 
@@ -52,7 +52,7 @@ module.exports = {
         _id: user_id
       }, req.body);
 
-      await emailService.sendMail('oleg.duda.mail@gmail.com', UPDATE, {
+      await emailService.sendMail(TEST_MAIL, UPDATE, {
         userName: req.checkOnUser.name
       });
 
@@ -73,9 +73,9 @@ module.exports = {
       });
 
       if (_id.toString() === user_id) {
-        await userService.deleteWithMail(DELETE_USER, req.checkOnUser.name, 'oleg.duda.mail@gmail.com');
+        userService.deleteWithMail(DELETE_USER, req.checkOnUser.name, TEST_MAIL);
       } else {
-        await userService.deleteWithMail(DELETE_ADMIN, req.checkOnUser.name, 'oleg.duda.mail@gmail.com');
+        userService.deleteWithMail(DELETE_ADMIN, req.checkOnUser.name, TEST_MAIL);
       }
 
       res.status(code.DELETE)
