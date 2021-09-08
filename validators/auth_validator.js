@@ -7,6 +7,10 @@ const validAuth = Joi.object({
   password: Joi.string().regex(PASSWORD_REGEXP).trim().required()
 });
 
+const loginValidator = Joi.object({
+  login: Joi.string().alphanum().min(2).max(30).trim().required()
+});
+
 module.exports = {
-  validAuth
+  validAuth, loginValidator
 };

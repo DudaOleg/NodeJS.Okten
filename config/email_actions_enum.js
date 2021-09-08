@@ -4,5 +4,6 @@ module.exports = {
   DELETE_ADMIN: 'delete_admin',
   UPDATE: 'update',
   CREATE: 'create',
+  FORGOT: 'forgot',
   TEST_MAIL: 'oleg.duda.mail@gmail.com'
 };

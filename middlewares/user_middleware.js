@@ -1,6 +1,7 @@
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
 const { userValidator: { createUserValidator, updateUserValidator } } = require('../validators');
+const { updateForgotUserValidator } = require('../validators/user_validator');
 
 module.exports = {
   validBody: (req, res, next) => {
@@ -56,11 +57,11 @@ module.exports = {
     }
   },
 
-  checkOn: (params, searchIn, dbField = params) => async (req, res, next) => {
+  checkOn: (params, searchIn = 'body', dbField = params) => async (req, res, next) => {
     try {
       const value = req[searchIn][params];
 
-      const user = await userService.getById({
+      const user = await userService.getOneItem({
         [dbField]: value
       });
 
@@ -103,4 +104,17 @@ module.exports = {
     }
   },
 
+  validForgotPass: (req, res, next) => {
+    try {
+      const { error } = updateForgotUserValidator.validate(req.body);
+
+      if (error) {
+        throw new ErrorHandler(code.NOT_VALID, error.details[0].message);
+      }
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  }
 };

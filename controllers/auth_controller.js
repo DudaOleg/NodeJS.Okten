@@ -1,4 +1,4 @@
-const { variables: { AUTHORIZATION }, emailActionsEnum: { WELCOME } } = require('../config');
+const { variables: { AUTHORIZATION }, emailActionsEnum: { WELCOME, TEST_MAIL } } = require('../config');
 const { errorMessage, code } = require('../errors');
 const { jwtService, authService, emailService } = require('../services');
 
@@ -12,7 +12,7 @@ module.exports = {
         ...tokenPair, user: _id
       });
 
-      await emailService.sendMail('oleg.duda.mail@gmail.com', WELCOME, {
+      await emailService.sendMail(TEST_MAIL, WELCOME, {
         userName: req.authorization.name
       });
 

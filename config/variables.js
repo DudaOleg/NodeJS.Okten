@@ -6,6 +6,8 @@ module.exports = {
   CURRENT_YEAR: new Date().getFullYear(),
   EMAIL_TEMPLATES: 'email_templates',
   EMAIL_REGEXP: new RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/),
+  EMAIL: 'email',
+  LOGIN: 'login',
   GMAIL: 'gmail',
   ID: '_id',
   PARAMS: 'params',
