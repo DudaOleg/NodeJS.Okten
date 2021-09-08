@@ -1,15 +1,18 @@
 const { code, errorMessage } = require('../errors');
-const { emailService, userService, passwordService } = require('../services');
-const { emailActionsEnum: { CREATE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL } } = require('../config');
+const { emailService, userService, passwordService, jwtService, authService } = require('../services');
+const { emailActionsEnum: { ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL } } = require('../config');
+const { userDataBase, forgotTokenDataBase } = require('../dataBase');
 
 module.exports = {
   createUser: async (req, res, next) => {
     try {
       const { password } = req.body;
+
       const hashedPassword = await passwordService.hash(password);
 
       const newUser = await userService.createUser({
-        ...req.body, password: hashedPassword
+        ...req.body,
+        password: hashedPassword
       });
 
       const withoutPass = newUser.toObject({
@@ -17,11 +20,21 @@ module.exports = {
       });
       delete withoutPass.password;
 
-      await emailService.sendMail(TEST_MAIL, CREATE, {
-        userName: req.checkEmailorLogin.name
+      const { _id } = newUser;
+      const forgotToken = jwtService.generateForgotToken();
+      const newForgotToken = forgotToken.forgotToken;
+
+      await authService.createForgotToken({
+        ...forgotToken,
+        user: _id
       });
 
-      res.status(code.CREATE).json(withoutPass);
+      await emailService.sendMail(TEST_MAIL, ACTIVE, {
+        TOKEN: newForgotToken
+      });
+
+      res.status(code.CREATE)
+        .json(forgotToken);
     } catch (e) {
       next(e);
     }
@@ -80,6 +93,26 @@ module.exports = {
 
       res.status(code.DELETE)
         .json(errorMessage.ok);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  userActiveOk: async (req, res, next) => {
+    try {
+      const { _id } = req.forgotTokenUser;
+
+      await userDataBase.findByIdAndUpdate({
+        _id
+      }, {
+        active: true
+      });
+
+      await forgotTokenDataBase.findOneAndDelete({
+        user: _id
+      });
+
+      res.json('OK');
     } catch (e) {
       next(e);
     }

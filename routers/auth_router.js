@@ -10,6 +10,6 @@ router.post('/', checkAuthDataValid, authorization, loginUser);
 router.post('/logout', accessToken, logOutUser);
 router.post('/refresh', refreshToken, refresh);
 router.post('/forgot', loginValidator, checkOn(LOGIN), forgotPass);
-router.put('/forgot', forgotToken, validForgotPass, newPass);
+router.patch('/forgot', forgotToken, validForgotPass, newPass);
 
 module.exports = router;

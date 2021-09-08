@@ -5,5 +5,6 @@ module.exports = {
   UPDATE: 'update',
   CREATE: 'create',
   FORGOT: 'forgot',
+  ACTIVE: 'active',
   TEST_MAIL: 'oleg.duda.mail@gmail.com'
 };
