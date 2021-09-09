@@ -91,8 +91,7 @@ module.exports = {
         userService.deleteWithMail(DELETE_ADMIN, req.checkOnUser.name, TEST_MAIL);
       }
 
-      res.status(code.DELETE)
-        .json(errorMessage.ok);
+      res.status(code.DELETE);
     } catch (e) {
       next(e);
     }

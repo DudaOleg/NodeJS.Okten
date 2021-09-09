@@ -1,24 +1,11 @@
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
-const { userValidator: { createUserValidator, updateUserValidator, actionValidator } } = require('../validators');
+const { userValidator: { actionValidator } } = require('../validators');
 
 module.exports = {
-  validBody: (req, res, next) => {
+  validBody: (validator) => (req, res, next) => {
     try {
-      const { error } = createUserValidator.validate(req.body);
-
-      if (error) {
-        throw new ErrorHandler(code.BAD_REQUEST, error.details[0].message);
-      }
-      next();
-    } catch (e) {
-      next(e);
-    }
-  },
-
-  validUpdateBody: (req, res, next) => {
-    try {
-      const { error } = updateUserValidator.validate(req.body);
+      const { error } = validator.validate(req.body);
 
       if (error) {
         throw new ErrorHandler(code.NOT_VALID, error.details[0].message);
