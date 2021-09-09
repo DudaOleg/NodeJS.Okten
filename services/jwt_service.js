@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { promisify } = require('util');
-const { constEnv: { ACCESSSECRETKEY, REFRESHSECRETKEY, FORGOTSECRETKEY }, variables: { ACCESS } } = require('../config');
+const { constEnv: { ACCESSSECRETKEY, REFRESHSECRETKEY, ACTIONSECRETKEY }, variables: { ACCESS } } = require('../config');
 const { ErrorHandler, code, errorMessage } = require('../errors');
 
 const verify = promisify(jwt.verify);
@@ -23,14 +23,14 @@ module.exports = {
     };
   },
 
-  generateForgotToken: () => {
-    const forgotToken = jwt.sign({
-    }, FORGOTSECRETKEY, {
+  generateActionToken: () => {
+    const actionToken = jwt.sign({
+    }, ACTIONSECRETKEY, {
       expiresIn: '20m'
     });
 
     return {
-      forgotToken
+      actionToken
     };
   },
 
@@ -44,9 +44,9 @@ module.exports = {
     }
   },
 
-  verifyForgetToken: async (token) => {
+  verifyActionToken: async (token) => {
     try {
-      await verify(token, FORGOTSECRETKEY);
+      await verify(token, ACTIONSECRETKEY);
     } catch (e) {
       throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
     }

@@ -3,5 +3,5 @@ module.exports = {
   tokenDataBase: require('./Token'),
   userDataBase: require('./User'),
   userRoles: require('./user_roles_enum'),
-  forgotTokenDataBase: require('./ForgotToken')
+  actionTokenDataBase: require('./ActionToken')
 };

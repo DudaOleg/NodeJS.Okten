@@ -1,6 +1,6 @@
 const { variables: { USER, AUTHORIZATION, REFRESH } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
-const { authService, passwordService: { compare }, jwtService: { verifyToken, verifyForgetToken } } = require('../services');
+const { authService, passwordService: { compare }, jwtService: { verifyToken, verifyActionToken } } = require('../services');
 const { authValidator: { validAuth, loginValidator } } = require('../validators');
 
 module.exports = {
@@ -69,25 +69,25 @@ module.exports = {
     }
   },
 
-  forgotToken: async (req, res, next) => {
+  actionToken: async (req, res, next) => {
     try {
-      const forgotToken = req.get(AUTHORIZATION);
+      const actionToken = req.get(AUTHORIZATION);
 
-      if (!forgotToken) {
+      if (!actionToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      await verifyForgetToken(forgotToken);
+      await verifyActionToken(actionToken);
 
-      const findToken = await authService.getOneForgotToken({
-        forgotToken
+      const findToken = await authService.getOneActionToken({
+        actionToken
       }).populate(USER);
 
       if (!findToken) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      req.forgotTokenUser = findToken.user;
+      req.actionTokenUser = findToken.user;
       next();
     } catch (err) {
       next(err);

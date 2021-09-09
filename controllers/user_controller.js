@@ -1,7 +1,7 @@
 const { code, errorMessage } = require('../errors');
 const { emailService, userService, passwordService, jwtService, authService } = require('../services');
 const { emailActionsEnum: { ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL } } = require('../config');
-const { userDataBase, forgotTokenDataBase } = require('../dataBase');
+const { userDataBase, actionTokenDataBase } = require('../dataBase');
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -21,20 +21,20 @@ module.exports = {
       delete withoutPass.password;
 
       const { _id } = newUser;
-      const forgotToken = jwtService.generateForgotToken();
-      const newForgotToken = forgotToken.forgotToken;
+      const actionToken = jwtService.generateActionToken();
+      const newActionToken = actionToken.forgotToken;
 
-      await authService.createForgotToken({
-        ...forgotToken,
+      await authService.createActionToken({
+        ...actionToken,
         user: _id
       });
 
       await emailService.sendMail(TEST_MAIL, ACTIVE, {
-        TOKEN: newForgotToken
+        TOKEN: newActionToken
       });
 
       res.status(code.CREATE)
-        .json(forgotToken);
+        .json(actionToken);
     } catch (e) {
       next(e);
     }
@@ -98,9 +98,9 @@ module.exports = {
     }
   },
 
-  userActiveOk: async (req, res, next) => {
+  userActive: async (req, res, next) => {
     try {
-      const { _id } = req.forgotTokenUser;
+      const { _id } = req.actionTokenUser;
 
       await userDataBase.findByIdAndUpdate({
         _id
@@ -108,7 +108,7 @@ module.exports = {
         active: true
       });
 
-      await forgotTokenDataBase.findOneAndDelete({
+      await actionTokenDataBase.findOneAndDelete({
         user: _id
       });
 

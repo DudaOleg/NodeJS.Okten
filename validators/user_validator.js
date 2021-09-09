@@ -20,10 +20,10 @@ const updateUserValidator = Joi.object({
   password: Joi.string().regex(PASSWORD_REGEXP),
 });
 
-const updateForgotUserValidator = Joi.object({
+const actionValidator = Joi.object({
   password: Joi.string().regex(PASSWORD_REGEXP).required()
 });
 
 module.exports = {
-  createUserValidator, updateUserValidator, updateForgotUserValidator
+  createUserValidator, updateUserValidator, actionValidator
 };

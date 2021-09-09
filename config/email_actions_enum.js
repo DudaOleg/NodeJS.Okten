@@ -6,5 +6,6 @@ module.exports = {
   CREATE: 'create',
   FORGOT: 'forgot',
   ACTIVE: 'active',
-  TEST_MAIL: 'oleg.duda.mail@gmail.com'
+  TEST_MAIL: 'oleg.duda.mail@gmail.com',
+  GOOGLE_URL: 'oleg.duda.mail@gmail.com',
 };

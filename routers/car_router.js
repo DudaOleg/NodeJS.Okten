@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { CAR_ID, PARAMS, ID } = require('../config');
+const { variables: { CAR_ID, PARAMS, ID } } = require('../config');
 const { carController: { deleteCar, getSingleCar, updateCar, createCar, getAllCar } } = require('../controllers');
 const { carMiddleware: { isValidField, checkOnCar, validUpdateBody } } = require('../middlewares');
 

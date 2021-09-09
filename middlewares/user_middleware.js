@@ -1,7 +1,6 @@
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
-const { userValidator: { createUserValidator, updateUserValidator } } = require('../validators');
-const { updateForgotUserValidator } = require('../validators/user_validator');
+const { userValidator: { createUserValidator, updateUserValidator, actionValidator } } = require('../validators');
 
 module.exports = {
   validBody: (req, res, next) => {
@@ -104,9 +103,9 @@ module.exports = {
     }
   },
 
-  validForgotPass: (req, res, next) => {
+  validActionPass: (req, res, next) => {
     try {
-      const { error } = updateForgotUserValidator.validate(req.body);
+      const { error } = actionValidator.validate(req.body);
 
       if (error) {
         throw new ErrorHandler(code.NOT_VALID, error.details[0].message);

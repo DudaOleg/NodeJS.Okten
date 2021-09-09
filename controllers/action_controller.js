@@ -1,36 +1,33 @@
 const { jwtService, authService, emailService, passwordService, userService } = require('../services');
-const { emailActionsEnum: { TEST_MAIL, FORGOT, CREATE } } = require('../config');
-const { code } = require('../errors');
-const { tokenDataBase, forgotTokenDataBase } = require('../dataBase');
+const { emailActionsEnum: { TEST_MAIL, FORGOT, GOOGLE_URL, WELCOME } } = require('../config');
+const { code, errorMessage } = require('../errors');
+const { tokenDataBase, actionTokenDataBase } = require('../dataBase');
 
 module.exports = {
   forgotPass: async (req, res, next) => {
     try {
       const { _id } = req.checkOnUser;
-      const forgotToken = jwtService.generateForgotToken();
-      const newForgotToken = forgotToken.forgotToken;
+      const actionToken = jwtService.generateActionToken();
+      const newActionToken = actionToken.actionToken;
 
-      await authService.createForgotToken({
-        ...forgotToken,
+      await authService.createActionToken({
+        ...actionToken,
         user: _id
       });
 
       await emailService.sendMail(TEST_MAIL, FORGOT, {
-        userName: req.checkOnUser.name, TOKEN: newForgotToken
+        userName: req.checkOnUser.name, TOKEN: `${GOOGLE_URL}/password?token=${newActionToken} `
       });
 
-      res.json({
-        ...forgotToken,
-        user: _id
-      });
+      res.json(errorMessage.ok);
     } catch (e) {
       next(e);
     }
   },
 
-  newPass: async (req, res, next) => {
+  updatePass: async (req, res, next) => {
     try {
-      const { name, _id } = req.forgotTokenUser;
+      const { name, _id } = req.actionTokenUser;
 
       const { password } = req.body;
 
@@ -40,11 +37,11 @@ module.exports = {
         password: hashedPassword
       });
 
-      await emailService.sendMail(TEST_MAIL, CREATE, {
+      await emailService.sendMail(TEST_MAIL, WELCOME, {
         userName: name
       });
 
-      await forgotTokenDataBase.findOneAndDelete({
+      await actionTokenDataBase.findOneAndDelete({
         user: _id
       });
 
