@@ -1,6 +1,19 @@
-const { variables: { AUTHORIZATION }, emailActionsEnum: { WELCOME, TEST_MAIL, FORGOT, GOOGLE_URL } } = require('../config');
 const { errorMessage, code } = require('../errors');
-const { jwtService, authService, emailService, passwordService } = require('../services');
+const {
+  variables: { AUTHORIZATION },
+  emailActionsEnum: {
+    WELCOME,
+    TEST_MAIL,
+    FORGOT,
+    GOOGLE_URL
+  }
+} = require('../config');
+const {
+  jwtService,
+  authService,
+  emailService,
+  passwordService
+} = require('../services');
 
 module.exports = {
   loginUser: async (req, res, next) => {
@@ -84,16 +97,12 @@ module.exports = {
 
   updatePass: async (req, res, next) => {
     try {
+      const password = req.newPass;
       const { name, _id } = req.actionTokenUser;
-
-      const { password } = req.body;
-      console.log(password, 'NEW_PASS');
 
       const hashedPassword = await passwordService.hash(password);
 
-      await authService.updateOneItem({
-        password: hashedPassword
-      });
+      await authService.updateOneItem({ _id }, { password: hashedPassword });
 
       await emailService.sendMail(TEST_MAIL, WELCOME, {
         userName: name

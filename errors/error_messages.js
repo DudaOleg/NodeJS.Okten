@@ -45,5 +45,9 @@ module.exports = {
 
   TemplateNotFound: {
     message: 'Template not found'
+  },
+
+  oldAndNewPassword: {
+    message: 'The new password does not have to be like old password'
   }
 };

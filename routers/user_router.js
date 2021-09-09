@@ -27,7 +27,7 @@ const {
   },
   authMiddleware: {
     accessToken,
-    actionToken
+    actionToken,
   }
 } = require('../middlewares');
 const {
@@ -37,12 +37,27 @@ const {
   }
 } = require('../validators');
 
-router.post('/signup', validBody(createUserValidator), checkUniqueEmailOrLogin, createUser);
-router.post('/active', actionToken, userActive);
-router.get('/', getAllUsers);
-router.get('/:user_id', checkOn(USER_ID, PARAMS, ID), getSingleUser);
-// eslint-disable-next-line max-len
-router.patch('/:user_id', validBody(updateUserValidator), accessToken, checkOn(USER_ID, PARAMS, ID), checkUserRole([ADMIN]), updateUser);
-router.delete('/:user_id', accessToken, checkOn(USER_ID, PARAMS, ID), checkUserRole([ADMIN]), deleteUser);
+router.post('/signup',
+  validBody(createUserValidator),
+  checkUniqueEmailOrLogin,
+  createUser);
+router.post('/active',
+  actionToken,
+  userActive);
+router.get('/',
+  getAllUsers);
+router.get('/:user_id',
+  checkOn(USER_ID, PARAMS, ID),
+  getSingleUser);
+router.patch('/:user_id',
+  validBody(updateUserValidator),
+  accessToken, checkOn(USER_ID, PARAMS, ID),
+  checkUserRole([ADMIN]),
+  updateUser);
+router.delete('/:user_id',
+  accessToken,
+  checkOn(USER_ID, PARAMS, ID),
+  checkUserRole([ADMIN]),
+  deleteUser);
 
 module.exports = router;

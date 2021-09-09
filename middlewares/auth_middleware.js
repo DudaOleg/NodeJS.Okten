@@ -1,6 +1,9 @@
 const { variables: { USER, AUTHORIZATION, REFRESH } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
-const { authService, passwordService: { compare }, jwtService: { verifyToken, verifyActionToken } } = require('../services');
+const {
+  authService, passwordService: { compare }, jwtService: { verifyToken, verifyActionToken },
+  userService
+} = require('../services');
 const { authValidator: { validAuth, loginValidator } } = require('../validators');
 
 module.exports = {
@@ -129,6 +132,27 @@ module.exports = {
       next();
     } catch (err) {
       next(err);
+    }
+  },
+
+  checkPassForChange: async (req, res, next) => {
+    try {
+      const user = req.actionTokenUser;
+
+      const userWithPass = await userService.getById({ _id: user._id }).select('+password');
+
+      const { password, oldPassword } = req.body;
+
+      await compare(userWithPass.password, oldPassword);
+
+      if (password === oldPassword) {
+        throw new ErrorHandler(code.NOT_VALID, errorMessage.oldAndNewPassword);
+      }
+
+      req.newPass = password;
+      next();
+    } catch (e) {
+      next(e);
     }
   }
 };

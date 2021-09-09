@@ -4,7 +4,7 @@ const {
 } = require('../services');
 const {
   emailActionsEnum: {
-    ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL
+    ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL, GOOGLE_URL
   }
 } = require('../config');
 const { userDataBase, actionTokenDataBase } = require('../dataBase');
@@ -31,7 +31,7 @@ module.exports = {
       });
 
       await emailService.sendMail(TEST_MAIL, ACTIVE, {
-        TOKEN: newActionToken
+        TOKEN: `${GOOGLE_URL}/password?token=${newActionToken} `
       });
 
       res.status(code.CREATE).json(errorMessage.ok);

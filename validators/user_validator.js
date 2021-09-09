@@ -21,6 +21,7 @@ const updateUserValidator = Joi.object({
 });
 
 const actionValidator = Joi.object({
+  oldPassword: Joi.string().regex(PASSWORD_REGEXP).required(),
   password: Joi.string().regex(PASSWORD_REGEXP).required()
 });
 
