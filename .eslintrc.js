@@ -26,13 +26,7 @@ module.exports = {
         minItems: 2
       },
     ],
-    'object-curly-newline': [
-      'error',
-      {
-        ObjectExpression: 'always',
-        ImportDeclaration: 'never',
-      }
-    ],
+    'object-curly-newline': 'error',
     'arrow-body-style': 'error',
     'block-scoped-var': 'error',
     complexity: 'error',

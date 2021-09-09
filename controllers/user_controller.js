@@ -1,6 +1,12 @@
 const { code, errorMessage } = require('../errors');
-const { emailService, userService, passwordService, jwtService, authService } = require('../services');
-const { emailActionsEnum: { ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL } } = require('../config');
+const {
+  emailService, userService, passwordService, jwtService, authService
+} = require('../services');
+const {
+  emailActionsEnum: {
+    ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL
+  }
+} = require('../config');
 const { userDataBase, actionTokenDataBase } = require('../dataBase');
 
 module.exports = {
@@ -15,14 +21,9 @@ module.exports = {
         password: hashedPassword
       });
 
-      const withoutPass = newUser.toObject({
-        getters: false
-      });
-      delete withoutPass.password;
-
       const { _id } = newUser;
       const actionToken = jwtService.generateActionToken();
-      const newActionToken = actionToken.forgotToken;
+      const newActionToken = actionToken.actionToken;
 
       await authService.createActionToken({
         ...actionToken,
@@ -33,8 +34,7 @@ module.exports = {
         TOKEN: newActionToken
       });
 
-      res.status(code.CREATE)
-        .json(actionToken);
+      res.status(code.CREATE).json(errorMessage.ok);
     } catch (e) {
       next(e);
     }
@@ -91,7 +91,7 @@ module.exports = {
         userService.deleteWithMail(DELETE_ADMIN, req.checkOnUser.name, TEST_MAIL);
       }
 
-      res.status(code.DELETE);
+      res.sendStatus(code.DELETE);
     } catch (e) {
       next(e);
     }

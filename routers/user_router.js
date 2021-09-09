@@ -1,11 +1,41 @@
 const router = require('express').Router();
 
-const { variables: { ID, PARAMS, USER_ID, ADMIN } } = require('../config');
-// eslint-disable-next-line max-len
-const { userController: { createUser, getAllUsers, updateUser, deleteUser, getSingleUser, userActive } } = require('../controllers');
-const { userMiddleware: { validBody, checkOn, checkUniqueEmailOrLogin, checkUserRole },
-  authMiddleware: { accessToken, actionToken } } = require('../middlewares');
-const { userValidator: { createUserValidator, updateUserValidator } } = require('../validators');
+const {
+  variables: {
+    ID,
+    PARAMS,
+    USER_ID,
+    ADMIN
+  }
+} = require('../config');
+const {
+  userController: {
+    createUser,
+    getAllUsers,
+    updateUser,
+    deleteUser,
+    getSingleUser,
+    userActive
+  }
+} = require('../controllers');
+const {
+  userMiddleware: {
+    validBody,
+    checkOn,
+    checkUniqueEmailOrLogin,
+    checkUserRole
+  },
+  authMiddleware: {
+    accessToken,
+    actionToken
+  }
+} = require('../middlewares');
+const {
+  userValidator: {
+    createUserValidator,
+    updateUserValidator
+  }
+} = require('../validators');
 
 router.post('/signup', validBody(createUserValidator), checkUniqueEmailOrLogin, createUser);
 router.post('/active', actionToken, userActive);
