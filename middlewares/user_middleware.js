@@ -22,7 +22,7 @@ module.exports = {
       const {
         role,
         _id
-      } = req.Token;
+      } = req.AccessRefresh;
       const { user_id } = req.params;
 
       if (!roleArray.length) {

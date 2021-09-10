@@ -1,7 +1,7 @@
-const { variables: { USER, AUTHORIZATION, REFRESH }, constEnv: { ACTIONSECRETKEY } } = require('../config');
+const { variables: { USER, AUTHORIZATION, REFRESH } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const {
-  authService, passwordService: { compare }, jwtService: { verifyToken, verifyActionToken },
+  authService, passwordService: { compare }, jwtService: { verifyToken },
   userService
 } = require('../services');
 const { authValidator: { validAuth, loginValidator } } = require('../validators');
@@ -47,50 +47,32 @@ module.exports = {
     }
   },
 
-  accessToken: async (req, res, next) => {
+  verifyToken: (word) => async (req, res, next) => {
     try {
-      const accessToken = req.get(AUTHORIZATION);
+      const token = req.get(AUTHORIZATION);
 
-      if (!accessToken) {
+      if (!token) {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      await verifyToken(accessToken);
+      await verifyToken(token, word);
 
-      const findToken = await authService.getOneToken({
-        accessToken
+      const findAccessOrRefresh = await authService.getOneToken({
+        token
       }).populate(USER);
 
-      if (!findToken) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
+      if (token !== findAccessOrRefresh) {
+        const findAction = await authService.getOneActionToken({ actionToken: token });
+
+        if (!findAction) {
+          throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
+        }
+
+        req.ActionToken = findAction.user;
+        return next();
       }
 
-      req.Token = findToken.user;
-      next();
-    } catch (err) {
-      next(err);
-    }
-  },
-
-  actionToken: (word = ACTIONSECRETKEY) => async (req, res, next) => {
-    try {
-      const actionToken = req.get(AUTHORIZATION);
-
-      if (!actionToken) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
-      }
-
-      await verifyActionToken(actionToken, word);
-
-      const findToken = await authService.getOneActionToken({
-        actionToken
-      }).populate(USER);
-
-      if (!findToken) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
-      }
-
-      req.Token = findToken.user;
+      req.AccessRefresh = findAccessOrRefresh.user;
       next();
     } catch (err) {
       next(err);

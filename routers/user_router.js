@@ -5,7 +5,9 @@ const {
     ID,
     PARAMS,
     USER_ID,
-    ADMIN
+    ADMIN,
+    ACCESS,
+    ACTION
   }
 } = require('../config');
 const {
@@ -29,8 +31,7 @@ const {
     checkUserRole
   },
   authMiddleware: {
-    accessToken,
-    actionToken,
+    verifyToken
   }
 } = require('../middlewares');
 const {
@@ -41,13 +42,13 @@ const {
 } = require('../validators');
 
 router.post('/admin',
-  accessToken,
+  verifyToken(ACCESS),
   checkUserRole([ADMIN]),
   validator(createUserValidator),
   checkUniqueEmailOrLogin,
   createUserForAdmin);
 router.post('/active',
-  actionToken,
+  verifyToken(ACTION),
   userActive);
 router.post('/signup',
   validator(createUserValidator),
@@ -60,11 +61,12 @@ router.get('/:user_id',
   getSingleUser);
 router.patch('/:user_id',
   validator(updateUserValidator),
-  accessToken, checkOn(USER_ID, PARAMS, ID),
+  verifyToken(ACCESS),
+  checkOn(USER_ID, PARAMS, ID),
   checkUserRole([ADMIN]),
   updateUser);
 router.delete('/:user_id',
-  accessToken,
+  verifyToken(ACCESS),
   checkOn(USER_ID, PARAMS, ID),
   checkUserRole([ADMIN]),
   deleteUser);

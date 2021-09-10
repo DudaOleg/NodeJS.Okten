@@ -1,8 +1,20 @@
 const jwt = require('jsonwebtoken');
-
 const { promisify } = require('util');
-const { constEnv: { ACCESSSECRETKEY, REFRESHSECRETKEY }, variables: { ACCESS } } = require('../config');
+
+const {
+  constEnv: {
+    ACCESSSECRETKEY,
+    REFRESHSECRETKEY,
+    ACTIONSECRETKEY,
+    FORGOTSECRETKEY
+  }, variables: { ACCESS }
+} = require('../config');
 const { ErrorHandler, code, errorMessage } = require('../errors');
+const {
+  REFRESH,
+  ACTION,
+  FORGOT
+} = require('../config/variables');
 
 const verify = promisify(jwt.verify);
 
@@ -36,19 +48,24 @@ module.exports = {
 
   verifyToken: async (token, tokenType = ACCESS) => {
     try {
-      const secret = tokenType === ACCESS ? ACCESSSECRETKEY : REFRESHSECRETKEY;
+      let secret = '';
+      switch (tokenType) {
+        case ACCESS:
+          secret = ACCESSSECRETKEY;
+          break;
+        case REFRESH:
+          secret = REFRESHSECRETKEY;
+          break;
+        case ACTION:
+          secret = ACTIONSECRETKEY;
+          break;
+        case FORGOT:
+          secret = FORGOTSECRETKEY;
+      }
 
       await verify(token, secret);
     } catch (e) {
       throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
     }
-  },
-
-  verifyActionToken: async (token, word) => {
-    try {
-      await verify(token, word);
-    } catch (e) {
-      throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
-    }
-  },
+  }
 };

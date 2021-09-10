@@ -27,7 +27,7 @@ module.exports = {
   createUserForAdmin: async (req, res, next) => {
     try {
       const { password } = req.body;
-      const { name } = req.Token;
+      const { name } = req.AccessRefresh;
 
       const hashedPassword = await passwordService.hash(password);
 
