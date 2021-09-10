@@ -13,6 +13,9 @@ module.exports = {
   PARAMS: 'params',
   PASSWORD_REGEXP: new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/),
   REFRESH: 'refresh',
+  TIME_FORGOT: '20m',
+  TIME_ACTION: '20m',
+  TIME_ADMIN: '20m',
   USER: 'user',
   USER_ID: 'user_id'
 };

@@ -1,6 +1,6 @@
 const { errorMessage, code } = require('../errors');
 const {
-  variables: { AUTHORIZATION },
+  variables: { AUTHORIZATION, TIME_FORGOT },
   emailActionsEnum: {
     WELCOME,
     TEST_MAIL,
@@ -80,7 +80,7 @@ module.exports = {
   forgotPass: async (req, res, next) => {
     try {
       const { _id } = req.checkOnUser;
-      const actionToken = jwtService.generateActionToken(FORGOTSECRETKEY);
+      const actionToken = jwtService.generateActionToken(FORGOTSECRETKEY, TIME_FORGOT);
       const newActionToken = actionToken.actionToken;
 
       await authService.createActionToken({

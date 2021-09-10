@@ -17,6 +17,9 @@ const {
   },
   constEnv: {
     ACTIONSECRETKEY
+  },
+  variables: {
+    TIME_ADMIN
   }
 } = require('../config');
 
@@ -34,7 +37,7 @@ module.exports = {
       });
 
       const { _id } = newUser;
-      const actionToken = jwtService.generateActionToken(ACTIONSECRETKEY);
+      const actionToken = jwtService.generateActionToken(ACTIONSECRETKEY, TIME_ADMIN);
       const newActionToken = actionToken.actionToken;
 
       await authService.createActionToken({

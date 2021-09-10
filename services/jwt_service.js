@@ -23,10 +23,10 @@ module.exports = {
     };
   },
 
-  generateActionToken: (word) => {
+  generateActionToken: (word, time) => {
     const actionToken = jwt.sign({
     }, word, {
-      expiresIn: '20m'
+      expiresIn: time
     });
 
     return {

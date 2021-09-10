@@ -8,6 +8,8 @@ const {
   }
 } = require('../config');
 const { userDataBase, actionTokenDataBase } = require('../dataBase');
+const { ACTIONSECRETKEY } = require('../config/constEnv');
+const { TIME_ACTION } = require('../config/variables');
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -22,7 +24,7 @@ module.exports = {
       });
 
       const { _id } = newUser;
-      const actionToken = jwtService.generateActionToken();
+      const actionToken = jwtService.generateActionToken(ACTIONSECRETKEY, TIME_ACTION);
       const newActionToken = actionToken.actionToken;
 
       await authService.createActionToken({
