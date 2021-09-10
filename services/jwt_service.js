@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const { promisify } = require('util');
-const { constEnv: { ACCESSSECRETKEY, REFRESHSECRETKEY, ACTIONSECRETKEY }, variables: { ACCESS } } = require('../config');
+const { constEnv: { ACCESSSECRETKEY, REFRESHSECRETKEY }, variables: { ACCESS } } = require('../config');
 const { ErrorHandler, code, errorMessage } = require('../errors');
 
 const verify = promisify(jwt.verify);
@@ -23,9 +23,9 @@ module.exports = {
     };
   },
 
-  generateActionToken: () => {
+  generateActionToken: (word) => {
     const actionToken = jwt.sign({
-    }, ACTIONSECRETKEY, {
+    }, word, {
       expiresIn: '20m'
     });
 
@@ -44,9 +44,9 @@ module.exports = {
     }
   },
 
-  verifyActionToken: async (token) => {
+  verifyActionToken: async (token, word) => {
     try {
-      await verify(token, ACTIONSECRETKEY);
+      await verify(token, word);
     } catch (e) {
       throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
     }

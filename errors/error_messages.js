@@ -49,5 +49,9 @@ module.exports = {
 
   oldAndNewPassword: {
     message: 'The new password does not have to be like old password'
+  },
+
+  differentPasswords: {
+    message: 'Different passwords'
   }
 };

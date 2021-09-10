@@ -17,19 +17,27 @@ const {
     refreshToken,
     loginValidator,
     actionToken,
-    checkPassForChange
+    checkPassForChange,
+    ForgotPass
   },
   userMiddleware: {
     checkOn,
-    validActionPass
+    validator
   }
 } = require('../middlewares');
-const { variables: { LOGIN } } = require('../config');
+const {
+  userValidator: {
+    onePasswordValidator,
+    twoPasswordsValidator
+  }
+} = require('../validators');
+const { variables: { LOGIN }, constEnv: { FORGOTSECRETKEY } } = require('../config');
 
 router.post('/', checkAuthDataValid, authorization, loginUser);
 router.post('/logout', accessToken, logOutUser);
 router.post('/refresh', refreshToken, refresh);
 router.post('/password/reset', loginValidator, checkOn(LOGIN), forgotPass);
-router.patch('/change', actionToken, validActionPass, checkPassForChange, updatePass);
+router.patch('/change', actionToken(FORGOTSECRETKEY), validator(onePasswordValidator), ForgotPass, updatePass);
+router.patch('/password/change', accessToken, validator(twoPasswordsValidator), checkPassForChange, updatePass);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const { variables: { USER, AUTHORIZATION, REFRESH } } = require('../config');
+const { variables: { USER, AUTHORIZATION, REFRESH }, constEnv: { ACTIONSECRETKEY } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const {
   authService, passwordService: { compare }, jwtService: { verifyToken, verifyActionToken },
@@ -65,14 +65,14 @@ module.exports = {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      req.accessTokenUser = findToken.user;
+      req.Token = findToken.user;
       next();
     } catch (err) {
       next(err);
     }
   },
 
-  actionToken: async (req, res, next) => {
+  actionToken: (word = ACTIONSECRETKEY) => async (req, res, next) => {
     try {
       const actionToken = req.get(AUTHORIZATION);
 
@@ -80,7 +80,7 @@ module.exports = {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      await verifyActionToken(actionToken);
+      await verifyActionToken(actionToken, word);
 
       const findToken = await authService.getOneActionToken({
         actionToken
@@ -90,7 +90,7 @@ module.exports = {
         throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
       }
 
-      req.actionTokenUser = findToken.user;
+      req.Token = findToken.user;
       next();
     } catch (err) {
       next(err);
@@ -137,7 +137,7 @@ module.exports = {
 
   checkPassForChange: async (req, res, next) => {
     try {
-      const user = req.actionTokenUser;
+      const user = req.Token;
 
       const userWithPass = await userService.getById({ _id: user._id }).select('+password');
 
@@ -151,8 +151,23 @@ module.exports = {
 
       req.newPass = password;
       next();
-    } catch (e) {
-      next(e);
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  ForgotPass: (req, res, next) => {
+    try {
+      const { password, confirmPassword } = req.body;
+
+      if (password !== confirmPassword) {
+        throw new ErrorHandler(code.NOT_VALID, errorMessage.differentPasswords);
+      }
+
+      req.newPass = password;
+      next();
+    } catch (err) {
+      next(err);
     }
   }
 };

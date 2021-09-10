@@ -14,17 +14,23 @@ const createUserValidator = Joi.object({
 });
 
 const updateUserValidator = Joi.object({
+  login: Joi.string().alphanum().min(3).max(30).trim(),
   name: Joi.string().alphanum().min(3).max(30),
   surname: Joi.string().alphanum().min(3).max(30).trim(),
   email: Joi.string().regex(EMAIL_REGEXP),
   password: Joi.string().regex(PASSWORD_REGEXP),
 });
 
-const actionValidator = Joi.object({
+const twoPasswordsValidator = Joi.object({
   oldPassword: Joi.string().regex(PASSWORD_REGEXP).required(),
   password: Joi.string().regex(PASSWORD_REGEXP).required()
 });
 
+const onePasswordValidator = Joi.object({
+  confirmPassword: Joi.string().regex(PASSWORD_REGEXP).required(),
+  password: Joi.string().regex(PASSWORD_REGEXP).required()
+});
+
 module.exports = {
-  createUserValidator, updateUserValidator, actionValidator
+  createUserValidator, updateUserValidator, twoPasswordsValidator, onePasswordValidator
 };

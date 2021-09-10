@@ -16,11 +16,14 @@ const {
     deleteUser,
     getSingleUser,
     userActive
+  },
+  adminController: {
+    createUserForAdmin
   }
 } = require('../controllers');
 const {
   userMiddleware: {
-    validBody,
+    validator,
     checkOn,
     checkUniqueEmailOrLogin,
     checkUserRole
@@ -33,24 +36,30 @@ const {
 const {
   userValidator: {
     createUserValidator,
-    updateUserValidator
+    updateUserValidator,
   }
 } = require('../validators');
 
-router.post('/signup',
-  validBody(createUserValidator),
+router.post('/admin',
+  accessToken,
+  checkUserRole([ADMIN]),
+  validator(createUserValidator),
   checkUniqueEmailOrLogin,
-  createUser);
+  createUserForAdmin);
 router.post('/active',
   actionToken,
   userActive);
+router.post('/signup',
+  validator(createUserValidator),
+  checkUniqueEmailOrLogin,
+  createUser);
 router.get('/',
   getAllUsers);
 router.get('/:user_id',
   checkOn(USER_ID, PARAMS, ID),
   getSingleUser);
 router.patch('/:user_id',
-  validBody(updateUserValidator),
+  validator(updateUserValidator),
   accessToken, checkOn(USER_ID, PARAMS, ID),
   checkUserRole([ADMIN]),
   updateUser);

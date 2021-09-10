@@ -6,6 +6,9 @@ const {
     TEST_MAIL,
     FORGOT,
     GOOGLE_URL
+  },
+  constEnv: {
+    FORGOTSECRETKEY
   }
 } = require('../config');
 const {
@@ -77,7 +80,7 @@ module.exports = {
   forgotPass: async (req, res, next) => {
     try {
       const { _id } = req.checkOnUser;
-      const actionToken = jwtService.generateActionToken();
+      const actionToken = jwtService.generateActionToken(FORGOTSECRETKEY);
       const newActionToken = actionToken.actionToken;
 
       await authService.createActionToken({
@@ -98,7 +101,7 @@ module.exports = {
   updatePass: async (req, res, next) => {
     try {
       const password = req.newPass;
-      const { name, _id } = req.actionTokenUser;
+      const { name, _id } = req.Token;
 
       const hashedPassword = await passwordService.hash(password);
 

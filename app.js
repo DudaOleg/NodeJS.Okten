@@ -14,7 +14,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 
-const { userRouter, carRouter, authRouter } = require('./routers');
+const { userRouter, carRouter, authRouter, } = require('./routers');
 const { code, errorMessage } = require('./errors');
 
 app.use('/authorization', authRouter);

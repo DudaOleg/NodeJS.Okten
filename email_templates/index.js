@@ -1,4 +1,8 @@
-const { emailActionsEnum: { WELCOME, CREATE, DELETE_USER, DELETE_ADMIN, UPDATE, FORGOT, ACTIVE } } = require('../config');
+const {
+  emailActionsEnum: {
+    WELCOME, CREATE, DELETE_USER, DELETE_ADMIN, UPDATE, FORGOT, ACTIVE, ACTIVE_WITH_ADMIN
+  }
+} = require('../config');
 
 module.exports = {
   [WELCOME]: {
@@ -15,11 +19,11 @@ module.exports = {
   },
   [DELETE_USER]: {
     templateName: 'delete_user',
-    subject: 'DELETE_USER'
+    subject: 'DELETE USER'
   },
   [DELETE_ADMIN]: {
     templateName: 'delete_admin',
-    subject: 'DELETE_ADMIN'
+    subject: 'DELETE ADMIN'
   },
   [UPDATE]: {
     templateName: 'update',
@@ -29,4 +33,8 @@ module.exports = {
     templateName: 'forgot',
     subject: 'FORGOT'
   },
+  [ACTIVE_WITH_ADMIN]: {
+    templateName: 'activeWithAdmin',
+    subject: 'active with Admin'
+  }
 };

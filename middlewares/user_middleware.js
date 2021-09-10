@@ -1,9 +1,9 @@
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const { userService } = require('../services');
-const { userValidator: { actionValidator } } = require('../validators');
+const { userValidator: { passwordValidator } } = require('../validators');
 
 module.exports = {
-  validBody: (validator) => (req, res, next) => {
+  validator: (validator) => (req, res, next) => {
     try {
       const { error } = validator.validate(req.body);
 
@@ -22,7 +22,7 @@ module.exports = {
       const {
         role,
         _id
-      } = req.accessTokenUser;
+      } = req.Token;
       const { user_id } = req.params;
 
       if (!roleArray.length) {
@@ -92,7 +92,7 @@ module.exports = {
 
   validActionPass: (req, res, next) => {
     try {
-      const { error } = actionValidator.validate(req.body);
+      const { error } = passwordValidator.validate(req.body);
 
       if (error) {
         throw new ErrorHandler(code.NOT_VALID, error.details[0].message);
