@@ -61,11 +61,11 @@ module.exports = {
         }
 
         req.Token = findAccessOrRefresh.user;
-
         return next();
       }
 
       req.Token = findAction.user;
+      req.forDelete = token;
       next();
     } catch (err) {
       next(err);

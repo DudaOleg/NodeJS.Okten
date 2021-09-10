@@ -101,6 +101,7 @@ module.exports = {
   updatePass: async (req, res, next) => {
     try {
       const password = req.newPass;
+      const actionToken = req.forDelete;
       const { name, _id } = req.Token;
 
       const hashedPassword = await passwordService.hash(password);
@@ -112,7 +113,7 @@ module.exports = {
       });
 
       await authService.findDeleteOneAction({
-        user: _id
+        actionToken
       });
 
       await authService.deleteAccessAndRefresh({
