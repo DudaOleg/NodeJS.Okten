@@ -23,12 +23,12 @@ const {
 } = require('../middlewares');
 const {
   userValidator: {
-    onePasswordValidator,
-    twoPasswordsValidator
+    confirmPass,
+    oldPass
   },
   auth_validator: {
-    loginValidator,
-    validAuth
+    login,
+    Auth
   }
 } = require('../validators');
 const {
@@ -40,11 +40,11 @@ const {
   },
 } = require('../config');
 
-router.post('/', validator(validAuth), authorization, loginUser);
+router.post('/', validator(Auth), authorization, loginUser);
 router.post('/logout', verifyToken(ACCESS), logOutUser);
 router.post('/refresh', verifyToken(REFRESH), refresh);
-router.post('/password/reset', validator(loginValidator), checkOn(LOGIN), forgotPass);
-router.patch('/change', verifyToken(FORGOT), validator(onePasswordValidator), newPass, updatePass);
-router.patch('/password/change', verifyToken(ACCESS), validator(twoPasswordsValidator), checkPassForChange, updatePass);
+router.post('/password/reset', validator(login), checkOn(LOGIN), forgotPass);
+router.patch('/change', verifyToken(FORGOT), validator(confirmPass), newPass, updatePass);
+router.patch('/password/change', verifyToken(ACCESS), validator(oldPass), checkPassForChange, updatePass);
 
 module.exports = router;

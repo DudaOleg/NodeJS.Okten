@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
 
+const { ErrorHandler, code, errorMessage } = require('../errors');
 const {
   constEnv: {
     ACCESSSECRETKEY,
@@ -9,7 +10,6 @@ const {
     FORGOTSECRETKEY
   }, variables: { ACCESS }
 } = require('../config');
-const { ErrorHandler, code, errorMessage } = require('../errors');
 const {
   REFRESH,
   ACTION,

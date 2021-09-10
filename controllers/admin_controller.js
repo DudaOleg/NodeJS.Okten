@@ -1,30 +1,15 @@
+const { code, errorMessage } = require('../errors');
 const {
-  passwordService,
-  userService,
-  jwtService,
-  authService,
-  emailService
+  passwordService, userService, jwtService, authService, emailService
 } = require('../services');
 const {
-  code,
-  errorMessage
-} = require('../errors');
-const {
-  emailActionsEnum: {
-    GOOGLE_URL,
-    TEST_MAIL,
-    ACTIVE_WITH_ADMIN
-  },
-  constEnv: {
-    ACTIONSECRETKEY
-  },
-  variables: {
-    TIME_ADMIN
-  }
+  emailActionsEnum: { GOOGLE_URL, TEST_MAIL, ACTIVE_WITH_ADMIN },
+  constEnv: { ACTIONSECRETKEY },
+  variables: { TIME_ADMIN }
 } = require('../config');
 
 module.exports = {
-  createUserForAdmin: async (req, res, next) => {
+  createAdmin: async (req, res, next) => {
     try {
       const { password } = req.body;
       const { name } = req.Token;

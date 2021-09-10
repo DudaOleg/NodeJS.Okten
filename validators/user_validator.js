@@ -3,7 +3,7 @@ const Joi = require('joi');
 const { variables: { CURRENT_YEAR, PASSWORD_REGEXP, EMAIL_REGEXP } } = require('../config');
 const { userRoles } = require('../dataBase');
 
-const createUserValidator = Joi.object({
+const create = Joi.object({
   login: Joi.string().alphanum().min(3).max(30).trim().required(),
   name: Joi.string().alphanum().min(3).max(30).trim().required(),
   surname: Joi.string().alphanum().min(3).max(30).trim().required(),
@@ -13,7 +13,7 @@ const createUserValidator = Joi.object({
   role: Joi.string().allow(...Object.values(userRoles)),
 });
 
-const updateUserValidator = Joi.object({
+const update = Joi.object({
   login: Joi.string().alphanum().min(3).max(30).trim(),
   name: Joi.string().alphanum().min(3).max(30),
   surname: Joi.string().alphanum().min(3).max(30).trim(),
@@ -21,16 +21,16 @@ const updateUserValidator = Joi.object({
   password: Joi.string().regex(PASSWORD_REGEXP),
 });
 
-const twoPasswordsValidator = Joi.object({
+const oldPass = Joi.object({
   oldPassword: Joi.string().regex(PASSWORD_REGEXP).required(),
   password: Joi.string().regex(PASSWORD_REGEXP).required()
 });
 
-const onePasswordValidator = Joi.object({
+const confirmPass = Joi.object({
   confirmPassword: Joi.string().regex(PASSWORD_REGEXP).required(),
   password: Joi.string().regex(PASSWORD_REGEXP).required()
 });
 
 module.exports = {
-  createUserValidator, updateUserValidator, twoPasswordsValidator, onePasswordValidator
+  create, update, confirmPass, oldPass
 };

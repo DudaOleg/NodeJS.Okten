@@ -17,7 +17,7 @@ module.exports = {
     }
   },
 
-  checkUserRole: (roleArray = []) => (req, res, next) => {
+  checkRole: (roleArray = []) => (req, res, next) => {
     try {
       const { role, _id } = req.Token;
       const { user_id } = req.params;
@@ -59,7 +59,7 @@ module.exports = {
     }
   },
 
-  checkUniqueEmailOrLogin: async (req, res, next) => {
+  checkEmailOrLogin: async (req, res, next) => {
     try {
       const { email, login } = req.body;
 

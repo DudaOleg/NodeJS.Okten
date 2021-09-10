@@ -20,15 +20,15 @@ const {
     userActive
   },
   adminController: {
-    createUserForAdmin
+    createAdmin
   }
 } = require('../controllers');
 const {
   userMiddleware: {
     validator,
     checkOn,
-    checkUniqueEmailOrLogin,
-    checkUserRole
+    checkEmailOrLogin,
+    checkRole
   },
   authMiddleware: {
     verifyToken
@@ -36,39 +36,18 @@ const {
 } = require('../middlewares');
 const {
   userValidator: {
-    createUserValidator,
-    updateUserValidator,
+    create,
+    update,
   }
 } = require('../validators');
 
-router.post('/admin',
-  verifyToken(ACCESS),
-  checkUserRole([ADMIN]),
-  validator(createUserValidator),
-  checkUniqueEmailOrLogin,
-  createUserForAdmin);
-router.post('/active',
-  verifyToken(ACTION),
-  userActive);
-router.post('/signup',
-  validator(createUserValidator),
-  checkUniqueEmailOrLogin,
-  createUser);
-router.get('/',
-  getAllUsers);
-router.get('/:user_id',
-  checkOn(USER_ID, PARAMS, ID),
-  getSingleUser);
-router.patch('/:user_id',
-  validator(updateUserValidator),
-  verifyToken(ACCESS),
-  checkOn(USER_ID, PARAMS, ID),
-  checkUserRole([ADMIN]),
+router.post('/admin', verifyToken(ACCESS), checkRole([ADMIN]), validator(create), checkEmailOrLogin, createAdmin);
+router.post('/active', verifyToken(ACTION), userActive);
+router.post('/signup', validator(create), checkEmailOrLogin, createUser);
+router.get('/', getAllUsers);
+router.get('/:user_id', checkOn(USER_ID, PARAMS, ID), getSingleUser);
+router.patch('/:user_id', validator(update), verifyToken(ACCESS), checkOn(USER_ID, PARAMS, ID), checkRole([ADMIN]),
   updateUser);
-router.delete('/:user_id',
-  verifyToken(ACCESS),
-  checkOn(USER_ID, PARAMS, ID),
-  checkUserRole([ADMIN]),
-  deleteUser);
+router.delete('/:user_id', verifyToken(ACCESS), checkOn(USER_ID, PARAMS, ID), checkRole([ADMIN]), deleteUser);
 
 module.exports = router;
