@@ -11,11 +11,9 @@ const {
 } = require('../controllers');
 const {
   authMiddleware: {
-    checkAuthDataValid,
     authorization,
-    loginValidator,
     checkPassForChange,
-    ForgotPass,
+    newPass,
     verifyToken
   },
   userMiddleware: {
@@ -27,6 +25,10 @@ const {
   userValidator: {
     onePasswordValidator,
     twoPasswordsValidator
+  },
+  auth_validator: {
+    loginValidator,
+    validAuth
   }
 } = require('../validators');
 const {
@@ -38,11 +40,11 @@ const {
   },
 } = require('../config');
 
-router.post('/', checkAuthDataValid, authorization, loginUser);
+router.post('/', validator(validAuth), authorization, loginUser);
 router.post('/logout', verifyToken(ACCESS), logOutUser);
 router.post('/refresh', verifyToken(REFRESH), refresh);
-router.post('/password/reset', loginValidator, checkOn(LOGIN), forgotPass);
-router.patch('/change', verifyToken(FORGOT), validator(onePasswordValidator), ForgotPass, updatePass);
+router.post('/password/reset', validator(loginValidator), checkOn(LOGIN), forgotPass);
+router.patch('/change', verifyToken(FORGOT), validator(onePasswordValidator), newPass, updatePass);
 router.patch('/password/change', verifyToken(ACCESS), validator(twoPasswordsValidator), checkPassForChange, updatePass);
 
 module.exports = router;

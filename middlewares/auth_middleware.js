@@ -4,23 +4,8 @@ const {
   authService, passwordService: { compare }, jwtService: { verifyToken },
   userService
 } = require('../services');
-const { authValidator: { validAuth, loginValidator } } = require('../validators');
 
 module.exports = {
-
-  checkAuthDataValid: (req, res, next) => {
-    try {
-      const { error } = validAuth.validate(req.body);
-
-      if (error) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidField);
-      }
-
-      next();
-    } catch (err) {
-      next(err);
-    }
-  },
 
   authorization: async (req, res, next) => {
     try {
@@ -87,20 +72,6 @@ module.exports = {
     }
   },
 
-  loginValidator: (req, res, next) => {
-    try {
-      const { error } = loginValidator.validate(req.body);
-
-      if (error) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidField);
-      }
-
-      next();
-    } catch (err) {
-      next(err);
-    }
-  },
-
   checkPassForChange: async (req, res, next) => {
     try {
       const user = req.Token;
@@ -122,7 +93,7 @@ module.exports = {
     }
   },
 
-  ForgotPass: (req, res, next) => {
+  newPass: (req, res, next) => {
     try {
       const { password, confirmPassword } = req.body;
 
