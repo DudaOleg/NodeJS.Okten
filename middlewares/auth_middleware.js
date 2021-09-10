@@ -57,9 +57,14 @@ module.exports = {
 
       await verifyToken(token, word);
 
-      const findAction = await authService.getOneActionToken({ actionToken: token }).populate(USER);
+      const findAction = await authService.getOneActionToken({
+        $or: [
+          { actionToken: token },
+          { token }
+        ]
+      }).populate(USER);
 
-      if (token !== findAction.actionToken) {
+      if (token !== findAction.token || findAction.actionToken) {
         const findAccessOrRefresh = await authService.getOneToken({
           $or: [
             { accessToken: token },
@@ -99,8 +104,6 @@ module.exports = {
   checkPassForChange: async (req, res, next) => {
     try {
       const user = req.AccessRefresh;
-      console.log('llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
-      console.log(user, 'usssssssserrrrrrrrr');
 
       const userWithPass = await userService.getById({ _id: user._id }).select('+password');
 

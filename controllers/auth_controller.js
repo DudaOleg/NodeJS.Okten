@@ -101,7 +101,7 @@ module.exports = {
   updatePass: async (req, res, next) => {
     try {
       const password = req.newPass;
-      const { name, _id } = req.ActionToken;
+      const { name, _id } = req.AccessRefresh;
 
       const hashedPassword = await passwordService.hash(password);
 
