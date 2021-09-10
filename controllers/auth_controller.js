@@ -57,7 +57,7 @@ module.exports = {
   refresh: async (req, res, next) => {
     try {
       const refreshToken = req.get(AUTHORIZATION);
-      const { _id } = req.AccessRefresh;
+      const { _id } = req.Token;
 
       await authService.deleteOneToken({
         refreshToken
@@ -70,7 +70,7 @@ module.exports = {
       });
 
       res.status(code.CREATE).json({
-        ...tokenPair, user: req.AccessRefresh
+        ...tokenPair, user: req.Token
       });
     } catch (e) {
       next(e);
@@ -101,7 +101,7 @@ module.exports = {
   updatePass: async (req, res, next) => {
     try {
       const password = req.newPass;
-      const { name, _id } = req.AccessRefresh;
+      const { name, _id } = req.Token;
 
       const hashedPassword = await passwordService.hash(password);
 

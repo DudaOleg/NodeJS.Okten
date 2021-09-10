@@ -19,10 +19,7 @@ module.exports = {
 
   checkUserRole: (roleArray = []) => (req, res, next) => {
     try {
-      const {
-        role,
-        _id
-      } = req.AccessRefresh;
+      const { role, _id } = req.Token;
       const { user_id } = req.params;
 
       if (!roleArray.length) {
@@ -64,10 +61,7 @@ module.exports = {
 
   checkUniqueEmailOrLogin: async (req, res, next) => {
     try {
-      const {
-        email,
-        login
-      } = req.body;
+      const { email, login } = req.body;
 
       const user = await userService.getOneItem({
         $or: [

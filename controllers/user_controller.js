@@ -81,7 +81,7 @@ module.exports = {
   deleteUser: async (req, res, next) => {
     try {
       const { user_id } = req.params;
-      const { _id } = req.AccessRefresh;
+      const { _id } = req.Token;
 
       await userService.deleteOneItem({
         _id: user_id
@@ -101,7 +101,7 @@ module.exports = {
 
   userActive: async (req, res, next) => {
     try {
-      const { _id } = req.ActionToken;
+      const { _id } = req.Token;
 
       await userDataBase.findByIdAndUpdate({
         _id

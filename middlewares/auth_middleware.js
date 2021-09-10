@@ -57,14 +57,13 @@ module.exports = {
 
       await verifyToken(token, word);
 
-      const findAction = await authService.getOneActionToken({
-        $or: [
-          { actionToken: token },
-          { token }
-        ]
-      }).populate(USER);
+      let findAction = await authService.getOneActionToken({ actionToken: token });
 
-      if (token !== findAction.token || findAction.actionToken) {
+      if (findAction === null) {
+        findAction = '';
+      }
+
+      if (token !== findAction.actionToken) {
         const findAccessOrRefresh = await authService.getOneToken({
           $or: [
             { accessToken: token },
@@ -76,11 +75,12 @@ module.exports = {
           throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
         }
 
-        req.AccessRefresh = findAccessOrRefresh.user;
+        req.Token = findAccessOrRefresh.user;
+
         return next();
       }
 
-      req.ActionToken = findAction.user;
+      req.Token = findAction.user;
       next();
     } catch (err) {
       next(err);
@@ -103,7 +103,7 @@ module.exports = {
 
   checkPassForChange: async (req, res, next) => {
     try {
-      const user = req.AccessRefresh;
+      const user = req.Token;
 
       const userWithPass = await userService.getById({ _id: user._id }).select('+password');
 
