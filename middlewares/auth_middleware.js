@@ -1,4 +1,4 @@
-const { variables: { USER, AUTHORIZATION, REFRESH } } = require('../config');
+const { variables: { USER, AUTHORIZATION } } = require('../config');
 const { ErrorHandler, errorMessage, code } = require('../errors');
 const {
   authService, passwordService: { compare }, jwtService: { verifyToken },
@@ -57,22 +57,25 @@ module.exports = {
 
       await verifyToken(token, word);
 
-      const findAccessOrRefresh = await authService.getOneToken({
-        token
-      }).populate(USER);
+      const findAction = await authService.getOneActionToken({ actionToken: token }).populate(USER);
 
-      if (token !== findAccessOrRefresh) {
-        const findAction = await authService.getOneActionToken({ actionToken: token });
+      if (token !== findAction.actionToken) {
+        const findAccessOrRefresh = await authService.getOneToken({
+          $or: [
+            { accessToken: token },
+            { refreshToken: token }
+          ]
+        }).populate(USER);
 
-        if (!findAction) {
+        if (!findAccessOrRefresh) {
           throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
         }
 
-        req.ActionToken = findAction.user;
+        req.AccessRefresh = findAccessOrRefresh.user;
         return next();
       }
 
-      req.AccessRefresh = findAccessOrRefresh.user;
+      req.ActionToken = findAction.user;
       next();
     } catch (err) {
       next(err);
@@ -93,33 +96,11 @@ module.exports = {
     }
   },
 
-  refreshToken: async (req, res, next) => {
-    try {
-      const refreshToken = req.get(AUTHORIZATION);
-      if (!refreshToken) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
-      }
-      await verifyToken(refreshToken, REFRESH);
-
-      const findToken = await authService.getOneToken({
-        refreshToken
-      }).populate(USER);
-
-      if (!findToken) {
-        throw new ErrorHandler(code.NOT_VALID, errorMessage.notValidToken);
-      }
-
-      req.refreshTokenUser = findToken.user;
-
-      next();
-    } catch (err) {
-      next(err);
-    }
-  },
-
   checkPassForChange: async (req, res, next) => {
     try {
-      const user = req.Token;
+      const user = req.AccessRefresh;
+      console.log('llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll');
+      console.log(user, 'usssssssserrrrrrrrr');
 
       const userWithPass = await userService.getById({ _id: user._id }).select('+password');
 

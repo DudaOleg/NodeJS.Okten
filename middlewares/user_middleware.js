@@ -71,12 +71,8 @@ module.exports = {
 
       const user = await userService.getOneItem({
         $or: [
-          {
-            email
-          },
-          {
-            login
-          }
+          { email },
+          { login }
         ]
       });
 
