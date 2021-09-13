@@ -3,9 +3,9 @@ const path = require('path');
 const uuid = require('uuid').v1;
 
 const bucket = new S3({
-  region: 'us-east-2',
-  accessKeyId: 'AKIASZJN5L5AXBOY2WVJ',
-  secretAccessKey: '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'
+  region: 'a',
+  accessKeyId: 'a',
+  secretAccessKey: 'a'
 });
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
 
     return bucket
       .upload({
-        Bucket: 'myoktenbucket',
+        Bucket: 'a',
         Body: data,
         Key: fileName,
         ContentType: mimetype
