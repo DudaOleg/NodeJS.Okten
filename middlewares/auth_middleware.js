@@ -50,7 +50,7 @@ module.exports = {
 
       if (token !== findAction.actionToken) {
         const findAccessOrRefresh = await authService.getOneToken({
-          $or: [
+          $_or: [
             { accessToken: token },
             { refreshToken: token }
           ]

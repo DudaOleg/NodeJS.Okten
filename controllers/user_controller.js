@@ -1,6 +1,6 @@
 const { code, errorMessage } = require('../errors');
 const {
-  emailService, userService, passwordService, jwtService, authService
+  emailService, userService, passwordService, jwtService, authService, s3Service
 } = require('../services');
 const {
   emailActionsEnum: {
@@ -18,12 +18,15 @@ module.exports = {
 
       const hashedPassword = await passwordService.hash(password);
 
-      const newUser = await userService.createUser({
-        ...req.body,
-        password: hashedPassword
-      });
+      const newUser = await userService.createUser({ ...req.body, password: hashedPassword });
 
       const { _id } = newUser;
+
+      if (req.files) {
+        const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', _id);
+        await userService.findByIdAndUpdateItem(_id, { photo: sendPhoto.Location }, { new: true });
+      }
+
       const actionToken = jwtService.generateActionToken(ACTIONSECRETKEY, TIME_ACTION);
       const newActionToken = actionToken.actionToken;
 
@@ -62,10 +65,12 @@ module.exports = {
 
   updateUser: async (req, res, next) => {
     try {
-      const { user_id } = req.params;
-      await userService.updateOneItem({
-        _id: user_id
-      }, req.body);
+      const user = req.checkOnUser;
+
+      const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', { _id: user._id });
+
+      await userService.findByIdAndUpdateItem({ _id: user._id }, { ...req.body, photo: sendPhoto.Location },
+        { new: true });
 
       await emailService.sendMail(TEST_MAIL, UPDATE, {
         userName: req.checkOnUser.name

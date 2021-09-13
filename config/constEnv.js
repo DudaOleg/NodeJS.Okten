@@ -1,5 +1,5 @@
 module.exports = {
-  ACCESSSECRETKEY: process.env.AccessSecretKey || '1secret',
+  ACCESS_SECRET_KEY: process.env.AccessSecretKey || '1secret',
   ACTIONSECRETKEY: process.env.ActionSecretKey || '3secret',
   CONNECT: process.env.CONNECT || 'mongodb://localhost:27017/Okten-2021',
   FORGOTSECRETKEY: process.env.ForgotSecretKey || '4secret',

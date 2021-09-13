@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const expressFileUpload = require('express-fileupload');
 
 require('dotenv').config();
 
@@ -10,9 +11,8 @@ const app = express();
 mongoose.connect(CONNECT);
 
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
+app.use(express.urlencoded({ extended: true }));
+app.use(expressFileUpload());
 
 const { userRouter, carRouter, authRouter, } = require('./routers');
 const { code, errorMessage } = require('./errors');

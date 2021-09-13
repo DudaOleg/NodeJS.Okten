@@ -14,7 +14,15 @@ module.exports = {
   ID: '_id',
   PARAMS: 'params',
   PASSWORD_REGEXP: new RegExp(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/),
+  PHOTO_MAX_SIZE: 5 * 1024 * 1024,
   REFRESH: 'refresh',
+  MIME_TYPES: {
+    PHOTO: [
+      'image/jpeg',
+      'image/jpg',
+      'image/png'
+    ]
+  },
   TIME_FORGOT: '20m',
   TIME_ACTION: '20m',
   TIME_ADMIN: '20m',

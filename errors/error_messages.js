@@ -53,5 +53,13 @@ module.exports = {
 
   differentPasswords: {
     message: 'Different passwords'
+  },
+
+  FileIsTooBig: {
+    message: 'File is too big'
+  },
+
+  WrongFile: {
+    message: 'Wrong file format'
   }
 };

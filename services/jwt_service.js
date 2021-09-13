@@ -4,7 +4,7 @@ const { promisify } = require('util');
 const { ErrorHandler, code, errorMessage } = require('../errors');
 const {
   constEnv: {
-    ACCESSSECRETKEY,
+    ACCESS_SECRET_KEY,
     REFRESHSECRETKEY,
     ACTIONSECRETKEY,
     FORGOTSECRETKEY
@@ -21,7 +21,7 @@ const verify = promisify(jwt.verify);
 module.exports = {
   generateTokenPair: () => {
     const accessToken = jwt.sign({
-    }, ACCESSSECRETKEY, {
+    }, ACCESS_SECRET_KEY, {
       expiresIn: '15m'
     });
     const refreshToken = jwt.sign({
@@ -51,7 +51,7 @@ module.exports = {
       let secret = '';
       switch (tokenType) {
         case ACCESS:
-          secret = ACCESSSECRETKEY;
+          secret = ACCESS_SECRET_KEY;
           break;
         case REFRESH:
           secret = REFRESHSECRETKEY;
