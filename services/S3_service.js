@@ -20,7 +20,7 @@ const bucket = new S3({
 module.exports = {
   uploadFile: (file, itemType, itemId) => {
     const { data, mimetype, name } = file;
-    const fileName = _fileNameBuilder(name, itemType, itemId);
+    const fileName = _fileNameBuilder(name, itemType, itemId.toString());
 
     return bucket
       .upload({
@@ -35,5 +35,5 @@ module.exports = {
 
 function _fileNameBuilder(fileName, itemType, itemId) {
   const fileExtension = fileName.split('.').pop();
-  return path.posix.join(itemType, itemId.toString(), `${uuid()}.${fileExtension}`);
+  return path.posix.join(itemType, itemId, `${uuid()}.${fileExtension}`);
 }
