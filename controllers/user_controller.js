@@ -73,8 +73,7 @@ module.exports = {
         await userService.findByIdAndUpdateItem({ _id: user_id }, { ...body, photo: sendPhoto.Location },
           { new: true });
       } else {
-        await userService.findByIdAndUpdateItem({ _id: user_id }, body,
-          { new: true });
+        await userService.findByIdAndUpdateItem({ _id: user_id }, body,);
       }
 
       await emailService.sendMail(TEST_MAIL, UPDATE, {
