@@ -27,5 +27,6 @@ module.exports = {
   TIME_ACTION: '20m',
   TIME_ADMIN: '20m',
   USER: 'user',
+  USERS: 'users',
   USER_ID: 'user_id'
 };

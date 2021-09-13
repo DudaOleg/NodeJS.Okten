@@ -5,11 +5,15 @@ const {
 const {
   emailActionsEnum: {
     ACTIVE, UPDATE, DELETE_USER, DELETE_ADMIN, TEST_MAIL, GOOGLE_URL
+  },
+  constEnv: {
+    ACTIONSECRETKEY
+  },
+  variables: {
+    TIME_ACTION,
+    USERS
   }
 } = require('../config');
-const { userDataBase, actionTokenDataBase } = require('../dataBase');
-const { ACTIONSECRETKEY } = require('../config/constEnv');
-const { TIME_ACTION } = require('../config/variables');
 
 module.exports = {
   createUser: async (req, res, next) => {
@@ -23,7 +27,7 @@ module.exports = {
       const { _id } = newUser;
 
       if (req.files) {
-        const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', _id);
+        const sendPhoto = await s3Service.uploadFile(req.files.photo, USERS, _id);
         await userService.findByIdAndUpdateItem(_id, { photo: sendPhoto.Location }, { new: true });
       }
 
@@ -69,7 +73,7 @@ module.exports = {
       const { body } = req;
 
       if (req.files && req.files.photo) {
-        const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', { _id: user_id });
+        const sendPhoto = await s3Service.uploadFile(req.files.photo, USERS, { _id: user_id });
         await userService.findByIdAndUpdateItem({ _id: user_id }, { ...body, photo: sendPhoto.Location },
           { new: true });
       } else {
@@ -112,13 +116,13 @@ module.exports = {
     try {
       const { _id } = req.Token;
 
-      await userDataBase.findByIdAndUpdate({
+      await userService.findByIdAndUpdateItem({
         _id
       }, {
         active: true
       });
 
-      await actionTokenDataBase.findOneAndDelete({
+      await authService.findDeleteOneAction({
         user: _id
       });
 
