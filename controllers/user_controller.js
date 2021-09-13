@@ -65,12 +65,19 @@ module.exports = {
 
   updateUser: async (req, res, next) => {
     try {
-      const user = req.checkOnUser;
+      const { user_id } = req.params;
+      const { body } = req;
 
-      const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', { _id: user._id });
+      if (req.files && req.files.photo) {
+        const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', { _id: user_id });
+        await userService.findByIdAndUpdateItem({ _id: user_id }, { ...body, photo: sendPhoto.Location },
+          { new: true });
+      }
 
-      await userService.findByIdAndUpdateItem({ _id: user._id }, { ...req.body, photo: sendPhoto.Location },
-        { new: true });
+      if (!req.files && !req.files.photo) {
+        await userService.findByIdAndUpdateItem({ _id: user_id }, body,
+          { new: true });
+      }
 
       await emailService.sendMail(TEST_MAIL, UPDATE, {
         userName: req.checkOnUser.name
