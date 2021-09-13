@@ -66,13 +66,17 @@ module.exports = {
   updateUser: async (req, res, next) => {
     try {
       const { user_id } = req.params;
+      let { files } = req;
       const { body } = req;
 
-      if (req.files && req.files.photo) {
+      if (files && req.files.photo) {
         const sendPhoto = await s3Service.uploadFile(req.files.photo, 'users', { _id: user_id });
         await userService.findByIdAndUpdateItem({ _id: user_id }, { ...body, photo: sendPhoto.Location },
           { new: true });
       }
+
+      // eslint-disable-next-line no-unused-expressions
+      files === null ? files = '' : files;
 
       if (!req.files && !req.files.photo) {
         await userService.findByIdAndUpdateItem({ _id: user_id }, body,
