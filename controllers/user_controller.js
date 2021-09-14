@@ -69,8 +69,7 @@ module.exports = {
 
   updateUser: async (req, res, next) => {
     try {
-      const { _id, name } = req.checkOnUser;
-      const { photo } = req.checkOnUser;
+      const { _id, name, photo } = req.checkOnUser;
       const user = req.body;
 
       if (req.files && req.files.photo) {
@@ -101,20 +100,20 @@ module.exports = {
     try {
       const { user_id } = req.params;
       const { _id } = req.Token;
-      const { photo } = req.checkOnUser;
+      const { photo, name } = req.checkOnUser;
 
       if (req.checkOnUser.photo) {
         await s3Service.deleteFile(photo);
       }
 
       await userService.deleteOneItem({
-        _id: user_id
+        _id
       });
 
       if (_id.toString() === user_id) {
-        userService.deleteWithMail(DELETE_USER, req.checkOnUser.name, TEST_MAIL);
+        userService.deleteWithMail(DELETE_USER, name, TEST_MAIL);
       } else {
-        userService.deleteWithMail(DELETE_ADMIN, req.checkOnUser.name, TEST_MAIL);
+        userService.deleteWithMail(DELETE_ADMIN, name, TEST_MAIL);
       }
 
       res.sendStatus(code.DELETE);

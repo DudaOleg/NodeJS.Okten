@@ -14,6 +14,7 @@ const { carMiddleware: { isValidField, checkOnCar, validUpdateBody } } = require
 
 router.post('/', isValidField, createCar);
 router.get('/', getAllCar);
+
 router.get('/:car_id', checkOnCar(CAR_ID, PARAMS, ID), getSingleCar);
 router.patch('/:car_id', validUpdateBody, checkOnCar(CAR_ID, PARAMS, ID), updateCar);
 router.delete('/:car_id', checkOnCar(CAR_ID, PARAMS, ID), deleteCar);

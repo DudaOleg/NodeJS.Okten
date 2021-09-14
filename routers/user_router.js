@@ -44,10 +44,13 @@ const {
   }
 } = require('../validators');
 
-router.post('/admin', verifyToken(ACCESS), checkRole([ADMIN]), validator(create), checkEmailOrLogin, createAdmin);
-router.post('/active', verifyToken(ACTION), userActive);
-router.post('/signup', validator(create), checkFile, checkEmailOrLogin, createUser);
+router.post('/', validator(create), checkFile, checkEmailOrLogin, createUser);
 router.get('/', getAllUsers);
+
+router.post('/admin', verifyToken(ACCESS), checkRole([ADMIN]), validator(create), checkEmailOrLogin, createAdmin);
+
+router.post('/active', verifyToken(ACTION), userActive);
+
 router.get('/:user_id', checkOn(USER_ID, PARAMS, ID), getSingleUser);
 router.patch('/:user_id', validator(update), checkFile, verifyToken(ACCESS), checkOn(USER_ID, PARAMS, ID),
   checkRole([ADMIN]),
