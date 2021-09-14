@@ -1,21 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
+const cors = require('cors');
 const expressFileUpload = require('express-fileupload');
+const expressRateLimit = require('express-rate-limit');
 
 require('dotenv').config();
 
-const { constEnv: { PORT, CONNECT } } = require('./config');
+const { constEnv: { PORT, CONNECT, ALLOWED_ORIGINS } } = require('./config');
+const cronJobs = require('./cron');
 
 const app = express();
 
 mongoose.connect(CONNECT);
+
+app.use(cors({ origin: _configureCors }));
+
+app.use(helmet());
+
+app.use(expressRateLimit({
+  windowMs: 15 * 60 * 100,
+  max: 1000
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(expressFileUpload());
 
 const { userRouter, carRouter, authRouter, } = require('./routers');
-const { code, errorMessage } = require('./errors');
+const {
+  code, errorMessage,
+  ErrorHandler
+} = require('./errors');
 
 app.use('/authorization', authRouter);
 app.use('/cars', carRouter);
@@ -25,6 +41,7 @@ app.use(_mainErrorHandler);
 
 app.listen(PORT, () => {
   console.log('Ok port', PORT);
+  cronJobs();
 });
 
 function _notFoundError(err, req, res, next) {
@@ -41,4 +58,18 @@ function _mainErrorHandler(err, req, res, next) {
     .json({
       message: err.message
     });
+}
+
+function _configureCors(origin, callback) {
+  const whiteList = ALLOWED_ORIGINS.split(';');
+
+  if (!origin && process.env.NODE_ENV === 'dev') {
+    return callback(null, true);
+  }
+
+  if (!whiteList.includes(origin)) {
+    return callback(new ErrorHandler(code.FORBIDDEN, errorMessage.Cors), false);
+  }
+
+  return callback(null, true);
 }

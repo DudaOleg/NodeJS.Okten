@@ -61,5 +61,9 @@ module.exports = {
 
   WrongFile: {
     message: 'Wrong file format'
+  },
+
+  Cors: {
+    message: 'CORSE not allowed'
   }
 };

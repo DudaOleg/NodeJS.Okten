@@ -15,7 +15,8 @@ const {
   jwtService,
   authService,
   emailService,
-  passwordService
+  passwordService,
+  userService
 } = require('../services');
 
 module.exports = {
@@ -27,6 +28,8 @@ module.exports = {
       await authService.createToken({
         ...tokenPair, user: _id
       });
+
+      await userService.findByIdAndUpdateItem({ _id }, { lastLogin: Date.now() });
 
       await emailService.sendMail(TEST_MAIL, WELCOME, {
         userName: req.authorization.name
