@@ -42,6 +42,8 @@ module.exports = {
 
       await verifyToken(token, word);
 
+      // eslint-disable-next-line max-len
+    // let findAction = await authService.getOneActionToken({ actionToken: token }) ?? findAction = ''; Оператор объединения с null '??'
       let findAction = await authService.getOneActionToken({ actionToken: token });
 
       if (findAction === null) {
