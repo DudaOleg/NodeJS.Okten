@@ -48,8 +48,8 @@ router.post('/refresh', verifyToken(REFRESH), refresh);
 
 router.post('/password/reset', validator(checkLog), checkOn(LOGIN), forgotPass);
 
-router.patch('/change', verifyToken(FORGOT), validator(confirmPass), newPass, updatePass);
+router.patch('/change', validator(confirmPass), verifyToken(FORGOT), newPass, updatePass);
 
-router.patch('/password/change', verifyToken(ACCESS), validator(oldPass), checkPassForChange, updatePass);
+router.patch('/password/change', validator(oldPass), verifyToken(ACCESS), checkPassForChange, updatePass);
 
 module.exports = router;

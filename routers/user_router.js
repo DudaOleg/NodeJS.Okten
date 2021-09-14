@@ -47,7 +47,7 @@ const {
 router.post('/', validator(create), checkFile, checkEmailOrLogin, createUser);
 router.get('/', getAllUsers);
 
-router.post('/admin', verifyToken(ACCESS), checkRole([ADMIN]), validator(create), checkEmailOrLogin, createAdmin);
+router.post('/admin', validator(create), verifyToken(ACCESS), checkRole([ADMIN]), checkEmailOrLogin, createAdmin);
 
 router.post('/active', verifyToken(ACTION), userActive);
 
