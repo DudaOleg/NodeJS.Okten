@@ -30,6 +30,14 @@ module.exports = {
         ContentType: mimetype
       })
       .promise();
+  },
+
+  deleteFile: (way) => {
+    const Key = way.substring(49);
+    return bucket.deleteObject({
+      Bucket: AWS_S3_NAME,
+      Key,
+    }).promise();
   }
 };
 

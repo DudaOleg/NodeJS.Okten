@@ -69,19 +69,25 @@ module.exports = {
 
   updateUser: async (req, res, next) => {
     try {
-      const { user_id } = req.params;
-      const { body } = req;
+      const { _id, name } = req.checkOnUser;
+      const { photo } = req.checkOnUser;
+      const user = req.body;
 
       if (req.files && req.files.photo) {
-        const sendPhoto = await s3Service.uploadFile(req.files.photo, USERS, { _id: user_id });
-        await userService.findByIdAndUpdateItem({ _id: user_id }, { ...body, photo: sendPhoto.Location },
+        if (req.checkOnUser.photo) {
+          await s3Service.deleteFile(photo);
+        }
+
+        const sendPhoto = await s3Service.uploadFile(req.files.photo, USERS, _id);
+
+        await userService.findByIdAndUpdateItem({ _id }, { ...user, photo: sendPhoto.Location },
           { new: true });
       } else {
-        await userService.findByIdAndUpdateItem({ _id: user_id }, body,);
+        await userService.findByIdAndUpdateItem({ _id }, user,);
       }
 
       await emailService.sendMail(TEST_MAIL, UPDATE, {
-        userName: req.checkOnUser.name
+        userName: name
       });
 
       res.status(code.CREATE)
@@ -95,6 +101,11 @@ module.exports = {
     try {
       const { user_id } = req.params;
       const { _id } = req.Token;
+      const { photo } = req.checkOnUser;
+
+      if (req.checkOnUser.photo) {
+        await s3Service.deleteFile(photo);
+      }
 
       await userService.deleteOneItem({
         _id: user_id
