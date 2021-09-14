@@ -18,8 +18,7 @@ module.exports = async () => {
     return;
   }
 
-  for (const user of users) {
-    // eslint-disable-next-line no-await-in-loop
+  for await (const user of users) {
     await emailService.sendMail(user.email, UPDATE, { userName: user.name });
   }
 };

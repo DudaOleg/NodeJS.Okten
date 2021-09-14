@@ -2,11 +2,15 @@ const EmailTemplates = require('email-templates');
 const nodemailer = require('nodemailer');
 const path = require('path');
 
-const { constEnv: { NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASSWORD, VIZIT_URL },
-  variables: { GMAIL, EMAIL_TEMPLATES } } = require('../config');
+const {
+  constEnv: { NO_REPLY_EMAIL, NO_REPLY_EMAIL_PASSWORD, VIZIT_URL },
+  variables: { GMAIL, EMAIL_TEMPLATES }
+} = require('../config');
 const allTemplates = require('../email_templates');
-const { ErrorHandler, code,
-  errorMessage } = require('../errors');
+const {
+  ErrorHandler, code,
+  errorMessage
+} = require('../errors');
 
 const templateParser = new EmailTemplates({
   views: {
