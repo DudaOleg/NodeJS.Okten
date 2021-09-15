@@ -5,7 +5,7 @@ const {
     ADMIN
   },
   constEnv: {
-    NAME_FIRST_ADMIN, PASS_FIRST_ADMIN, EMAIL_FIRST_ADMIN,
+    NAME_FIRST_ADMIN, PASS_FIRST_ADMIN, EMAIL_FIRST_ADMIN, LOGIN_FIRST_ADMIN
   }
 } = require('../config');
 
@@ -17,6 +17,7 @@ module.exports = (async () => {
       name: NAME_FIRST_ADMIN,
       password: await hash(PASS_FIRST_ADMIN),
       email: EMAIL_FIRST_ADMIN,
+      login: LOGIN_FIRST_ADMIN,
       role: ADMIN
     };
 

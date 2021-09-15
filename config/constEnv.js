@@ -16,5 +16,6 @@ module.exports = {
   VIZIT_URL: process.env.VIZIT_URL || 'https://www.youtube.com',
   NAME_FIRST_ADMIN: process.env.NAME_FIRST_ADMIN || 'ADMIN',
   PASS_FIRST_ADMIN: process.env.PASS_FIRST_ADMIN || 'ADMIN123',
-  EMAIL_FIRST_ADMIN: process.env.EMAIL_FIRST_ADMIN || 'admin@gmail.com'
+  EMAIL_FIRST_ADMIN: process.env.EMAIL_FIRST_ADMIN || 'admin@gmail.com',
+  LOGIN_FIRST_ADMIN: process.env.LOGIN_FIRST_ADMIN || 'login'
 };
