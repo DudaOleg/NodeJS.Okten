@@ -14,4 +14,7 @@ module.exports = {
   NO_REPLY_EMAIL: process.env.NO_REPLY_EMAIL || 'asddf@gmail.com',
   NO_REPLY_EMAIL_PASSWORD: process.env.NO_REPLY_EMAIL_PASSWORD || 'asdf66',
   VIZIT_URL: process.env.VIZIT_URL || 'https://www.youtube.com',
+  NAME_FIRST_ADMIN: process.env.NAME_FIRST_ADMIN || 'ADMIN',
+  PASS_FIRST_ADMIN: process.env.PASS_FIRST_ADMIN || 'ADMIN123',
+  EMAIL_FIRST_ADMIN: process.env.EMAIL_FIRST_ADMIN || 'admin@gmail.com'
 };

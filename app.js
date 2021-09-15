@@ -42,6 +42,7 @@ app.use(_mainErrorHandler);
 app.listen(PORT, () => {
   console.log('Ok port', PORT);
   cronJobs();
+  require('./utils/admin');
 });
 
 function _notFoundError(err, req, res, next) {
