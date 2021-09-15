@@ -3,22 +3,31 @@ const utc = require('dayjs/plugin/utc');
 
 datJs.extend(utc);
 
-const User = require('../dataBase/User');
+const AccessRefresh = require('../dataBase/Token');
 const { emailService } = require('../services');
-const { UPDATE } = require('../config/email_actions_enum');
+const {
+  email_actions_enum: {
+    UPDATE,
+    TEST_MAIL
+  },
+  variables: {
+    USERS,
+    DAY
+  }
+} = require('../config');
 
 module.exports = async () => {
   const tenDaysAfter = datJs.utc()
-    .subtract(10, 'day');
+    .subtract(10, DAY);
 
-  const users = await User.find({ lastLogin: { $lt: tenDaysAfter } });
+  const users = await AccessRefresh.find({ createdAt: { $lt: tenDaysAfter } }).populate(USERS);
 
   if (!users) {
     console.log('users not found');
     return;
   }
 
-  for await (const user of users) {
-    await emailService.sendMail(user.email, UPDATE, { userName: user.name });
-  }
+  await Promise.allSettled(users.map(async (item) => {
+    await emailService.sendMail(TEST_MAIL, UPDATE, { userName: item.user.name });
+  }));
 };

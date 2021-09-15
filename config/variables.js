@@ -5,6 +5,7 @@ module.exports = {
   AUTHORIZATION: 'Authorization',
   CAR_ID: 'car_id',
   CURRENT_YEAR: new Date().getFullYear(),
+  DAY: 'day',
   EMAIL_TEMPLATES: 'email_templates',
   EMAIL_REGEXP: new RegExp(/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/),
   EMAIL: 'email',

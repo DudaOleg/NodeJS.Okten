@@ -1,4 +1,5 @@
 const { errorMessage, code } = require('../errors');
+
 const {
   variables: { AUTHORIZATION, TIME_FORGOT },
   emailActionsEnum: {
@@ -15,8 +16,7 @@ const {
   jwtService,
   authService,
   emailService,
-  passwordService,
-  userService
+  passwordService
 } = require('../services');
 
 module.exports = {
@@ -28,8 +28,6 @@ module.exports = {
       await authService.createToken({
         ...tokenPair, user: _id
       });
-
-      await userService.findByIdAndUpdateItem({ _id }, { lastLogin: Date.now() });
 
       await emailService.sendMail(TEST_MAIL, WELCOME, {
         userName: req.authorization.name
