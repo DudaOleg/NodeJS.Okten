@@ -1,5 +1,5 @@
 const { userDataBase } = require('../dataBase');
-const { passwordServices: { hash } } = require('../services');
+const { passwordService: { hash } } = require('../services');
 const {
   variables: {
     ADMIN

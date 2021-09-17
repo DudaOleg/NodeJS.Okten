@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const expressFileUpload = require('express-fileupload');
 const expressRateLimit = require('express-rate-limit');
+const swaggerUI = require('swagger-ui-express');
 
 require('dotenv').config();
 
@@ -32,7 +33,9 @@ const {
   code, errorMessage,
   ErrorHandler
 } = require('./errors');
+const swaggerJSON = require('./docs/swagger.json');
 
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJSON));
 app.use('/authorization', authRouter);
 app.use('/cars', carRouter);
 app.use('/users', userRouter);
@@ -40,6 +43,7 @@ app.use('*', _notFoundError);
 app.use(_mainErrorHandler);
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log('Ok port', PORT);
   cronJobs();
   require('./utils/admin');

@@ -6,9 +6,9 @@ datJs.extend(utc);
 const AccessRefresh = require('../dataBase/Token');
 const { emailService } = require('../services');
 const {
-  email_actions_enum: {
-    UPDATE,
-    TEST_MAIL
+  emailActionsEnum: {
+    TEST_MAIL,
+    UPDATE
   },
   variables: {
     USERS,
