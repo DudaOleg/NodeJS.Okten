@@ -17,7 +17,6 @@
             "in": "query",
             "default": 10,
             "type": "number",
-            "required": false,
             "description": "How many users will be returned"
           }
         ],
@@ -70,7 +69,6 @@
             "name": "name",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User name"
           },
@@ -78,7 +76,6 @@
             "name": "surname",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User surname"
           },
@@ -220,7 +217,6 @@
             "name": "name",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User name"
           },
@@ -228,7 +224,6 @@
             "name": "surname",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User surname"
           },
@@ -236,7 +231,6 @@
             "name": "email",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John@gmail.com",
             "description": "User email"
           },
@@ -244,7 +238,6 @@
             "name": "login",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User login"
           }
@@ -356,7 +349,6 @@
             "name": "name",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User name"
           },
@@ -364,7 +356,6 @@
             "name": "surname",
             "in": "formData",
             "type": "string",
-            "required": false,
             "default": "John",
             "description": "User surname"
           },
@@ -406,7 +397,7 @@
                 "name": {
                   "description": "User name",
                   "type": "string",
-                  "example": "Vova"
+                  "example": "John"
                 },
                 "email": {
                   "description": "User email",
@@ -586,7 +577,6 @@
             "in": "query",
             "default": 10,
             "type": "number",
-            "required": false,
             "description": "How many cars will be returned"
           }
         ],
@@ -778,7 +768,6 @@
             "name": "Price",
             "in": "formData",
             "type": "number",
-            "required": false,
             "default": "65000",
             "description": "Price car"
           }
